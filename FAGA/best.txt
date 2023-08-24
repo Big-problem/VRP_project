@@ -1,0 +1,10 @@
+1. D=57228.6、tmin=3.386、tmax=9.423 ，z=20、g=50
+
+2. D=14201.42、 z=20、g=10
+
+total dist= 469.672, total routes= 6
+
+D = 421.618, K = 5, RB = 6.74049, all random
+D = 471.529, K = 5, RB = 21.8753, all random
+
+D = 452.606, K = 5, RB = 14.4816
