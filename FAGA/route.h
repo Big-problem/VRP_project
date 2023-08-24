@@ -20,4 +20,6 @@ public:
     void remove();
     bool operator<(Route);
     bool operator==(Route);
+
+    int get_total_nodes();
 };

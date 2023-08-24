@@ -33,7 +33,8 @@ void Solution::gen_solution(int c,const vector<Node> &node_list) //生成初始�
 {
     vector<Node> customer_list = node_list;
     bool add_route;
-    customer_list.erase(customer_list.begin());
+    customer_list.erase(customer_list.begin()); //去掉起點
+
     add_new_route(node_list[0],c,node_list[0].due_time);
     /*Node node_to_add=choice(customer_list);
     Remove(customer_list,node_to_add);
@@ -91,13 +92,13 @@ vector<Solution> gen_population(int z,int c,const vector<Node> &v) // generate z
 
 void Solution::print()
 {
-    /*cout<<"\n";
+    cout<<"\n";
     for(int i=0;i<total_routes;i++)
     {
         routes[i].print();
         //cout<<routes.size()<<" "<<total_routes<<"\n";
         cout<<"\n";
-    }*/
+    }
     cout<<"total dist= "<<total_dist_travelled<<", total routes= "<<total_routes<<", RB= "<<route_balance<<"\n";
 }
 
@@ -148,12 +149,20 @@ pair<int,int> best_pos(const vector<tuple<double,int,int>> &tmp)
     int ans=0,len=tmp.size();
     for(int i=1;i<len;i++)
     {
-        if(get<0>(tmp[ans]) > get<0>(tmp[i])) ans=i; // tuple用get來取值
+        if(get<0>(tmp[ans]) > get<0>(tmp[i])) ans=i; // tuple用get來取值, 找total distance最短的
     }
-    return make_pair(get<1>(tmp[ans]),get<2>(tmp[ans]));
+    return make_pair(get<1>(tmp[ans]),get<2>(tmp[ans])); // 回傳達到最短total distance要插入的位置
 }
 
 void Solution::test()
 {
     cout<<AFV<<" "<<F1v<<" "<<F2v<<" "<<F3v<<"\n";
+}
+
+int Solution::get_total_nodes(){
+    int ret = 0;
+    for(auto &i : routes){
+        ret += i.get_total_nodes();
+    }
+    return ret;
 }

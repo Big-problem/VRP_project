@@ -76,12 +76,12 @@ void Route::remove_node(Node node_to_remove)
 
 void Route::print()
 {
-    /*for(int i=0;i<total_nodes;i++)
+    for(int i=0;i<total_nodes;i++)
     {
         if(i) cout<<"->";
         nodes[i].print();
     }
-    cout<<"\n";*/
+    cout<<"\n";
     //for(int i=0;i<total_nodes-1;i++) cout<<Node::get_travel_distance(nodes[i],nodes[i+1])<<"\n";
     cout<<"\ntotal nodes= "<<total_nodes<<", total travel time= "<<total_travel_time<<", capacity= "<<capacity<<"\n";
 }
@@ -108,4 +108,9 @@ bool Route::operator==(Route b)
         }
     }
     return capacity==b.capacity&&total_nodes==b.total_nodes&&total_travel_time==b.total_travel_time;
+}
+
+
+int Route::get_total_nodes(){
+    return total_nodes;
 }

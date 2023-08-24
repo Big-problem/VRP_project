@@ -26,6 +26,8 @@ public:
     bool operator<(Solution);
     //Solution& operator=(const Solution&);
     static bool better(const Solution&,const Solution&);
+
+    int get_total_nodes();
 };
 
 pair<int,int> best_pos(const vector<tuple<double,int,int>>&);

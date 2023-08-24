@@ -28,7 +28,9 @@ void FAGA::run_algo()
     {
         vector<Solution> children;
         sset.attribute_calculator();
-        for(int j=0;j<crossover_time;j++) Crossover(children);
+        for(int j=0;j<crossover_time;j++){
+            Crossover(children);
+        }
         //sset.sort();
         solution_replace(children);
         //cout<<i<<": Done\n";
@@ -44,12 +46,14 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，
 
     Route r0=choice(cross_pair[0].routes),r1=choice(cross_pair[1].routes); // 兩解中各挑一路線
 
-    r0.nodes.erase(r0.nodes.begin()),r1.nodes.erase(r1.nodes.begin());
+    r0.nodes.erase(r0.nodes.begin()),r1.nodes.erase(r1.nodes.begin()); // 去掉起點
     cross_delete(r0.nodes,cross_pair[1].routes);
     cross_delete(r1.nodes,cross_pair[0].routes);
 
     BCRC(r0.nodes,cross_pair[1]);
+    if(cross_pair[1].get_total_nodes() < 33) cout << "HELP\n";
     BCRC(r1.nodes,cross_pair[0]);
+    if(cross_pair[0].get_total_nodes() < 33) cout << "HELP\n";
 
     /*cross_pair[0].sort(),cross_pair[1].sort();
     reset();
@@ -66,12 +70,13 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，
     while(!Mutate(b));
     children.emplace_back(a),children.emplace_back(b);*/
 
-    while(!Mutate(cross_pair[0]));
-    while(!Mutate(cross_pair[1]));
+    //while(!Mutate(cross_pair[0]));
+    //while(!Mutate(cross_pair[1]));
+
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
 
-void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int inserted) //生成新解
+void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int inserted) //生成新解(Old version)
 {
     if(fail_count>=1000) return;
     if(inserted==nodes.size()) //所有點都插入
@@ -98,7 +103,7 @@ void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int 
     BCRC(nodes,cps,ri+1,ni,1,inserted); //更換插入路線
 }
 
-void FAGA::BCRC(vector<Node> nodes,Solution &cps)
+void FAGA::BCRC(vector<Node> nodes,Solution &cps) // (要補回的node, 一組解)
 {
     while(!nodes.empty())
     {
