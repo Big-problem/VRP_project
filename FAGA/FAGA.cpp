@@ -40,13 +40,13 @@ void FAGA::run_algo()
     ans=sset.sol[sset.total_solution-1];
 }
 
-void FAGA::Crossover(vector<Solution> &children) //±qÂÂ¸Ñ¤¤¥HPc¬°Åv­«¬D¥X2­Ó¸Ñ¡A¦b±q³o2­Ó¸Ñªº¸ô½u¶°¦X¤¤­Ó§O¬D¥X1±ø¸ô½u¡A¥h°£©¼¦¹ªº¸`ÂI«á¥Í¦¨·s¤l¥N
+void FAGA::Crossover(vector<Solution> &children) //å¾èˆŠè§£ä¸­ä»¥Pcç‚ºæ¬Šé‡æŒ‘å‡º2å€‹è§£ï¼Œåœ¨å¾é€™2å€‹è§£çš„è·¯ç·šé›†åˆä¸­å€‹åˆ¥æŒ‘å‡º1æ¢è·¯ç·šï¼Œå»é™¤å½¼æ­¤çš„ç¯€é»å¾Œç”Ÿæˆæ–°å­ä»£
 {
-    vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,2); // ¥ô¬D¨â¸Ñ
+    vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,2); // ä»»æŒ‘å…©è§£
 
-    Route r0=choice(cross_pair[0].routes),r1=choice(cross_pair[1].routes); // ¨â¸Ñ¤¤¦U¬D¤@¸ô½u
+    Route r0=choice(cross_pair[0].routes),r1=choice(cross_pair[1].routes); // å…©è§£ä¸­å„æŒ‘ä¸€è·¯ç·š
 
-    r0.nodes.erase(r0.nodes.begin()),r1.nodes.erase(r1.nodes.begin()); // ¥h±¼°_ÂI
+    r0.nodes.erase(r0.nodes.begin()),r1.nodes.erase(r1.nodes.begin()); // å»æ‰èµ·é»
     cross_delete(r0.nodes,cross_pair[1].routes);
     cross_delete(r1.nodes,cross_pair[0].routes);
 
@@ -59,7 +59,7 @@ void FAGA::Crossover(vector<Solution> &children) //±qÂÂ¸Ñ¤¤¥HPc¬°Åv­«¬D¥X2­Ó¸Ñ¡A
     reset();
     BCRC(r0.nodes,cross_pair[1],0,0,1,0);
     if(buffer.empty()) return false;
-    std::sort(buffer.begin(),buffer.end(),Solution::better); //±Æ§Ç§ä¥XRB³Ì¤pªº¸Ñ
+    std::sort(buffer.begin(),buffer.end(),Solution::better); //æ’åºæ‰¾å‡ºRBæœ€å°çš„è§£
     Solution a=buffer[0],b;
     reset();
     BCRC(r1.nodes,cross_pair[0],0,0,1,0);
@@ -76,10 +76,10 @@ void FAGA::Crossover(vector<Solution> &children) //±qÂÂ¸Ñ¤¤¥HPc¬°Åv­«¬D¥X2­Ó¸Ñ¡A
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
 
-void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int inserted) //¥Í¦¨·s¸Ñ(Old version)
+void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int inserted) //ç”Ÿæˆæ–°è§£(Old version)
 {
     if(fail_count>=1000) return;
-    if(inserted==nodes.size()) //©Ò¦³ÂI³£´¡¤J
+    if(inserted==nodes.size()) //æ‰€æœ‰é»éƒ½æ’å…¥
     {
         cps.attribute_calculator();
         if(Solution::better(cps,target))
@@ -91,54 +91,54 @@ void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int 
         else fail_count++;
         return;
     }
-    if(ri>=cps.routes.size()||ni>=nodes.size()||pi>cps.routes[ri].nodes.size()) return; //index¶W¥X½d³ò
-    if(cps.routes[ri].add_node(pi,nodes[ni],capacity_limit,tmax)) //¦pªG¦¨¥\±NÂI´¡¤J
+    if(ri>=cps.routes.size()||ni>=nodes.size()||pi>cps.routes[ri].nodes.size()) return; //indexè¶…å‡ºç¯„åœ
+    if(cps.routes[ri].add_node(pi,nodes[ni],capacity_limit,tmax)) //å¦‚æœæˆåŠŸå°‡é»æ’å…¥
     {
         BCRC(nodes,cps,ri,ni+1,1,inserted+1);
-        cps.routes[ri].remove_node(nodes[ni]); //ÁÙ­ìª¬ºA
+        cps.routes[ri].remove_node(nodes[ni]); //é‚„åŸç‹€æ…‹
     }
     else fail_count++;
-    BCRC(nodes,cps,ri,ni,pi+1,inserted); //§ó´«´¡¤J¦ì¸m
+    BCRC(nodes,cps,ri,ni,pi+1,inserted); //æ›´æ›æ’å…¥ä½ç½®
     //if(ri+1<cps.routes.size()&&nodes[ni].demand+cps.routes[ri+1].capacity<=capacity_limit)
-    BCRC(nodes,cps,ri+1,ni,1,inserted); //§ó´«´¡¤J¸ô½u
+    BCRC(nodes,cps,ri+1,ni,1,inserted); //æ›´æ›æ’å…¥è·¯ç·š
 }
 
-void FAGA::BCRC(vector<Node> nodes,Solution &cps) // (­n¸É¦^ªºnode, ¤@²Õ¸Ñ)
+void FAGA::BCRC(vector<Node> nodes,Solution &cps) // (è¦è£œå›çš„node, ä¸€çµ„è§£)
 {
     while(!nodes.empty())
     {
-        Node &n=rchoice(nodes); //ÀH¾÷¿ï¨ú´¡¤J¸`ÂI
+        Node &n=rchoice(nodes); //éš¨æ©Ÿé¸å–æ’å…¥ç¯€é»
         vector<tuple<double,int,int>> tmp;
-        for(int i=0;i<cps.total_routes;i++) //¨C­Ó¸ô½u
+        for(int i=0;i<cps.total_routes;i++) //æ¯å€‹è·¯ç·š
         {
             int jl=cps.routes[i].nodes.size();
-            for(int j=1;j<=jl;j++) //¨C­Ó´¡¤JÂI
+            for(int j=1;j<=jl;j++) //æ¯å€‹æ’å…¥é»
             {
                 if(cps.routes[i].add_node(j,n,capacity_limit,tmax))
                 {
-                    cps.attribute_calculator(); //­pºâtotal_dist_travelled
-                    tmp.emplace_back(cps.total_dist_travelled,i,j); //¬ö¿ıtotal_dist_travelled¡B­ş±ø¸ô½u¡B­ş­Ó¦ì¸m
-                    cps.routes[i].remove_node(n); //´_­ì
+                    cps.attribute_calculator(); //è¨ˆç®—total_dist_travelled
+                    tmp.emplace_back(cps.total_dist_travelled,i,j); //ç´€éŒ„total_dist_travelledã€å“ªæ¢è·¯ç·šã€å“ªå€‹ä½ç½®
+                    cps.routes[i].remove_node(n); //å¾©åŸ
                 }
             }
         }
-        if(tmp.empty()) //¨S¦ì¸m¥i´¡->¶}·s¸ô½u
+        if(tmp.empty()) //æ²’ä½ç½®å¯æ’->é–‹æ–°è·¯ç·š
         {
             cps.add_new_route(node_list[0],capacity_limit,tmax);
             cps.routes[cps.total_routes-1].add_node(1,n,capacity_limit,tmax);
         }
         else
         {
-            pair<int,int> pii=best_pos(tmp); //§ä¨ìtotal_dist_travelled³Ì¤pªº¦ì¸m
-            cps.routes[pii.first].add_node(pii.second,n,capacity_limit,tmax); //´¡¤J
+            pair<int,int> pii=best_pos(tmp); //æ‰¾åˆ°total_dist_travelledæœ€å°çš„ä½ç½®
+            cps.routes[pii.first].add_node(pii.second,n,capacity_limit,tmax); //æ’å…¥
         }
         Remove(nodes,n);
     }
     cps.attribute_calculator();
-    cps.route_clear(); //²¾°£¥u³Ñ°_ÂIªº¸ô½u
+    cps.route_clear(); //ç§»é™¤åªå‰©èµ·é»çš„è·¯ç·š
 }
 
-void FAGA::cross_delete(const vector<Node> &v,vector<Route> &r) // ¥i¥H¥ÎªÅ¶¡´«®É¶¡
+void FAGA::cross_delete(const vector<Node> &v,vector<Route> &r) // å¯ä»¥ç”¨ç©ºé–“æ›æ™‚é–“
 {
     for(auto &node:v)
     {
@@ -157,16 +157,16 @@ bool FAGA::Mutate(Solution &s)
 {
     if(decide(mutation_probability))
     {
-        vector<Route> v=choices(s.routes,nullptr,nullptr,2); // ¬D¨â±ø¸ô½u
+        vector<Route> v=choices(s.routes,nullptr,nullptr,2); // æŒ‘å…©æ¢è·¯ç·š
         if(v[0]==v[1]) return false;
 
         vector<Node> c0=v[0].nodes,c1=v[1].nodes;
-        c0.erase(c0.begin()),c1.erase(c1.begin()); //§R°£°_ÂI
+        c0.erase(c0.begin()),c1.erase(c1.begin()); //åˆªé™¤èµ·é»
         if(!c0.size()||!c1.size()) return false;
 
         Node n0=choice(c0),n1=choice(c1);
         int p0=find(v[0].nodes.begin(),v[0].nodes.end(),n0)-v[0].nodes.begin(), p1=find(v[1].nodes.begin(),v[1].nodes.end(),n1)-v[1].nodes.begin();
-        if(!change(v[0],v[1],p0,p1)) return false; //ÀË¬d¨âÂI¦ì¸m¬O§_¥i¥H¤¬´«
+        if(!change(v[0],v[1],p0,p1)) return false; //æª¢æŸ¥å…©é»ä½ç½®æ˜¯å¦å¯ä»¥äº’æ›
         auto p2=find(s.routes.begin(),s.routes.end(),v[0]), p3=find(s.routes.begin(),s.routes.end(),v[1]);
         p2->remove_node(n0),p3->remove_node(n1);
         p2->add_node(p0,n1,capacity_limit,tmax);
@@ -175,7 +175,7 @@ bool FAGA::Mutate(Solution &s)
     return true;
 }
 
-bool FAGA::change(Route r1,Route r2,int i1,int i2) //ÀË¬d¨âÂI¬O§_¥i¥H¤¬´«
+bool FAGA::change(Route r1,Route r2,int i1,int i2) //æª¢æŸ¥å…©é»æ˜¯å¦å¯ä»¥äº’æ›
 {
     Node n1=*(r1.nodes.begin()+i1),n2=*(r2.nodes.begin()+i2);
     r1.remove_node(n1),r2.remove_node(n2);
@@ -184,7 +184,7 @@ bool FAGA::change(Route r1,Route r2,int i1,int i2) //ÀË¬d¨âÂI¬O§_¥i¥H¤¬´«
     return true;
 }
 
-void FAGA::solution_replace(const vector<Solution> &children) //±N·s¤l¥N¥[¤J·í«e¸Ñ¨Ã¥h°£³¡¤ÀÂÂ¸Ñ
+void FAGA::solution_replace(const vector<Solution> &children) //å°‡æ–°å­ä»£åŠ å…¥ç•¶å‰è§£ä¸¦å»é™¤éƒ¨åˆ†èˆŠè§£
 {
     int len=children.size();
     //for(int i=0;i<len;i++) sset.sol.erase(sset.sol.begin());

@@ -13,7 +13,7 @@ Population::Population()
     return;
 }
 
-void Population::attribute_calculator() //­pºâ¾AÀ³«×©MPc
+void Population::attribute_calculator() //è¨ˆç®—é©æ‡‰åº¦å’ŒPc
 {
     double dmax,dmin,RBmax,RBmin,a,b,c,total_AFV=0.0;
     int Kmax=INT_MIN,Kmin=INT_MAX;
@@ -42,7 +42,7 @@ void Population::attribute_calculator() //­pºâ¾AÀ³«×©MPc
     for(int i=0;i<total_solution;i++) crossover_probability[i]=sol[i].AFV/total_AFV;
 }
 
-void Population::sort() //¥H¾AÀ³«×±Æ§Ç¸Ñ
+void Population::sort() //ä»¥é©æ‡‰åº¦æ’åºè§£
 {
     /*try
     {

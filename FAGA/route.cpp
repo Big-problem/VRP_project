@@ -15,9 +15,9 @@ double Route::total_distance()
     return result;
 }
 
-bool Route::add_node(int index,Node node_to_add,int c,double t) //´¡¤J¦ì¸m¡B´¡¤J¸`ÂI¡B­t­«¤W­­¡B®É¶¡­­¨î¡B¦^¶Çµ²ªG
+bool Route::add_node(int index,Node node_to_add,int c,double t) //æ’å…¥ä½ç½®ã€æ’å…¥ç¯€é»ã€è² é‡ä¸Šé™ã€æ™‚é–“é™åˆ¶ã€å›å‚³çµæœ
 {
-    if(nodes.empty()) //°_ÂI¯S§P
+    if(nodes.empty()) //èµ·é»ç‰¹åˆ¤
     {
         nodes.emplace_back(node_to_add);
         total_nodes++;
@@ -25,7 +25,7 @@ bool Route::add_node(int index,Node node_to_add,int c,double t) //´¡¤J¦ì¸m¡B´¡¤J
     }
     index=index>total_nodes?total_nodes:index;
     Node::Node_setting(nodes[index-1],node_to_add);
-    if(legal(index,node_to_add,c,t)) //§PÂ_¬O§_¦Xªk
+    if(legal(index,node_to_add,c,t)) //åˆ¤æ–·æ˜¯å¦åˆæ³•
     {
         nodes.insert(nodes.begin()+index,node_to_add);
         total_nodes++;
@@ -37,7 +37,7 @@ bool Route::add_node(int index,Node node_to_add,int c,double t) //´¡¤J¦ì¸m¡B´¡¤J
     return false;
 }
 
-bool Route::legal(int index,Node node_to_add,int c,double t) //½Æ»s¸ô½u¸ê°T«áÀË¬d¬O§_¹H¤Ï­­¨î¦¡
+bool Route::legal(int index,Node node_to_add,int c,double t) //è¤‡è£½è·¯ç·šè³‡è¨Šå¾Œæª¢æŸ¥æ˜¯å¦é•åé™åˆ¶å¼
 {
     vector<Node> tmp=nodes;
     tmp.insert(tmp.begin()+index,node_to_add);
@@ -58,7 +58,7 @@ bool Route::legal(int index,Node node_to_add,int c,double t) //½Æ»s¸ô½u¸ê°T«áÀË¬
     return true;
 }
 
-void Route::update(int index) //§ó·s¸`ÂI®É¶¡¸ê°T
+void Route::update(int index) //æ›´æ–°ç¯€é»æ™‚é–“è³‡è¨Š
 {
     for(auto i=nodes.begin();i!=nodes.end()-1;i++) Node::Node_setting(*i,*(i+1));
 }
@@ -66,7 +66,7 @@ void Route::update(int index) //§ó·s¸`ÂI®É¶¡¸ê°T
 void Route::remove_node(Node node_to_remove)
 {
     auto p=find(nodes.begin(),nodes.end(),node_to_remove);
-    if(p==nodes.end()||p==nodes.begin()) return; //§ä¤£¨ì©Î§R°£°_ÂI
+    if(p==nodes.end()||p==nodes.begin()) return; //æ‰¾ä¸åˆ°æˆ–åˆªé™¤èµ·é»
     nodes.erase(p);
     capacity-=node_to_remove.demand;
     total_nodes--;
@@ -86,13 +86,13 @@ void Route::print()
     cout<<"\ntotal nodes= "<<total_nodes<<", total travel time= "<<total_travel_time<<", capacity= "<<capacity<<"\n";
 }
 
-void Route::remove() //´ú¸Õ¥Î
+void Route::remove() //æ¸¬è©¦ç”¨
 {
     remove_node(nodes[2]);
     remove_node(nodes[3]);
 }
 
-bool Route::operator<(Route b) //±Æ§Ç¥Î
+bool Route::operator<(Route b) //æ’åºç”¨
 {
     return capacity<b.capacity;
 }

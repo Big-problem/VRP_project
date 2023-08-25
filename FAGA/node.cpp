@@ -42,22 +42,22 @@ vector<Node> read_node()
 
 double Node::get_travel_distance(const Node na,const Node nb)
 {
-    if(method) // ¸g½n«×
+    if(method) // ç¶“ç·¯åº¦
     {
         double a,b,radLat1=Radian(na.position.first),radLat2=Radian(nb.position.first);
         a=radLat1-radLat2,b=Radian(na.position.second)-Radian(nb.position.second);
         double s=2*asin(sqrt(pow(sin(a/2),2)+cos(radLat1)*cos(radLat2)*pow(sin(b/2),2)));
         return s*EARTH_RADIUS*allowance_rate;
     }
-    // (x, y)®y¼Ğ
+    // (x, y)åº§æ¨™
     double x=(na.position.first-nb.position.first),y=(na.position.second-nb.position.second);
     return sqrt(x*x+y*y);
 }
 
 double Node::get_travel_time(const Node a,const Node b)
 {
-    if(method) return get_travel_distance(a,b)/60; // ¸g½n«×
-    // (x, y)®y¼Ğ
+    if(method) return get_travel_distance(a,b)/60; // ç¶“ç·¯åº¦
+    // (x, y)åº§æ¨™
     return get_travel_distance(a,b);
 }
 
@@ -66,13 +66,13 @@ double Radian(double degree)
     return degree*Pi/180;
 }
 
-void Node::Node_setting(Node &a,Node &b) // ³]©wbªºarrival_time ¸ò waiting time
+void Node::Node_setting(Node &a,Node &b) // è¨­å®šbçš„arrival_time è·Ÿ waiting time
 {
     b.arrival_time=Node::get_travel_time(a,b)+a.arrival_time+a.waiting_time+a.service_time;
     b.waiting_time=max(0.0,b.ready_time-b.arrival_time);
 }
 
-bool Node::operator==(Node b) //¤ñ¸û¦a§}¡B¸g½n«×¡B»İ¨D¶q......
+bool Node::operator==(Node b) //æ¯”è¼ƒåœ°å€ã€ç¶“ç·¯åº¦ã€éœ€æ±‚é‡......
 {
     return address==b.address&&position==b.position&&demand==b.demand&&ready_time==b.ready_time&&due_time==b.due_time;
 }

@@ -30,5 +30,5 @@ public:
     bool operator<(Node);
 };
 
-vector<Node> read_node(); //Åª¤å¦rÀÉ
-double Radian(double); //«×Âà©·«×
+vector<Node> read_node(); //è®€æ–‡å­—æª”
+double Radian(double); //åº¦è½‰å¼§åº¦
