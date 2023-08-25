@@ -11,25 +11,25 @@ bool decide(double);
 ll bisect(double*,double,ll,ll);
 ll rand_below(ll);
 
-const double allowance_rate=1.2; //¼e©ñ²v
+const double allowance_rate=1.2; //ï¿½eï¿½ï¿½v
 const double RECIP_BPF=pow(2,-BPF);
-const ll max_size=1<<BPF;
+const ll max_size = 1ULL << BPF;
 extern bool check;
 
 template<typename T>
-T choice(const vector<T> &v)  //ÀH¾÷¬D¿ï¡]«þ¨©¡^
+T choice(const vector<T> &v)  //ï¿½Hï¿½ï¿½ï¿½Dï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½^
 {
     return v[rand_below(v.size())];
 }
 
 template<typename T>
-T &rchoice(vector<T> &v)  //ÀH¾÷¬D¿ï¡]°Ñ¦Ò¡^
+T &rchoice(vector<T> &v)  //ï¿½Hï¿½ï¿½ï¿½Dï¿½ï¿½]ï¿½Ñ¦Ò¡^
 {
     return v[rand_below(v.size())];
 }
 
 template<typename T>
-vector<T> choices(const vector<T> &v,double *weights,double *cum_weights,ll k) //®Ú¾ÚÅv­«ÀH¾÷¬D¿ïk­Ó¡A¨S¦³Åv­«¸ê°T´Nµ¥Åv­«
+vector<T> choices(const vector<T> &v,double *weights,double *cum_weights,ll k) //ï¿½Ú¾ï¿½ï¿½vï¿½ï¿½ï¿½Hï¿½ï¿½ï¿½Dï¿½ï¿½kï¿½Ó¡Aï¿½Sï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½Tï¿½Nï¿½ï¿½ï¿½vï¿½ï¿½
 {
     vector<T> result;
     ll n=v.size();
