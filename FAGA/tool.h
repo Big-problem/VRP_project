@@ -11,25 +11,25 @@ bool decide(double);
 ll bisect(double*,double,ll,ll);
 ll rand_below(ll);
 
-const double allowance_rate=1.2; //�e��v
+const double allowance_rate=1.2; //寬放率
 const double RECIP_BPF=pow(2,-BPF);
-const ll max_size = 1ULL << BPF;
+const ll max_size = 1 << BPF;
 extern bool check;
 
 template<typename T>
-T choice(const vector<T> &v)  //�H���D��]�����^
+T choice(const vector<T> &v)   //隨機挑選（拷貝）
 {
     return v[rand_below(v.size())];
 }
 
 template<typename T>
-T &rchoice(vector<T> &v)  //�H���D��]�Ѧҡ^
+T &rchoice(vector<T> &v)  //隨機挑選（參考）
 {
     return v[rand_below(v.size())];
 }
 
 template<typename T>
-vector<T> choices(const vector<T> &v,double *weights,double *cum_weights,ll k) //�ھ��v���H���D��k�ӡA�S���v����T�N���v��
+vector<T> choices(const vector<T> &v,double *weights,double *cum_weights,ll k) //根據權重隨機挑選k個，沒有權重資訊就等權重
 {
     vector<T> result;
     ll n=v.size();

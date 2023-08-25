@@ -137,10 +137,11 @@ void Solution::route_clear()
     vector<int> dummy;
     for(int i=0;i<total_routes;i++)
     {
-        if(routes[i].nodes.size()==1) dummy.emplace_back(i);
+        if(routes[i].nodes.size()==1) dummy.emplace_back(i); // Find routes with only one node
     }
     int len=dummy.size();
-    for(int i=0;i<len;i++) routes.erase(routes.begin()+dummy[i]);
+    sort();
+    for(int i=0;i<len;i++) routes.erase(routes.begin()); // Delete routes with only one node
     total_routes-=len;
 }
 
