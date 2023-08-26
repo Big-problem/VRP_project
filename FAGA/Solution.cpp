@@ -97,7 +97,7 @@ void Solution::print()
     {
         routes[i].print();
         //cout<<routes.size()<<" "<<total_routes<<"\n";
-        cout<<"\n";
+        //cout<<"\n";
     }
     cout<<"total dist= "<<total_dist_travelled<<", total routes= "<<total_routes<<", RB= "<<route_balance<<"\n";
 }

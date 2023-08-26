@@ -13,7 +13,7 @@ ll rand_below(ll);
 
 const double allowance_rate=1.2; //寬放率
 const double RECIP_BPF=pow(2,-BPF);
-const ll max_size = 1 << BPF;
+const ll max_size = 1 << BPF; // Useless
 extern bool check;
 
 template<typename T>

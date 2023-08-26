@@ -31,7 +31,7 @@ int main()
     for(int i=1;i<=10;i++)
     {
         cout<<i<<": ";
-        FAGA ans(50,300,200,0.2);
+        FAGA ans(50,500,200,0.2);
         ans.run_algo();
         ans.test();
         cout<<"\n";
