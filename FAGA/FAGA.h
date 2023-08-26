@@ -24,6 +24,8 @@ public:
     void test2();
     static void cross_delete(const vector<Node>&,vector<Route>&);
 
+    void get_result_file(ofstream&);
+
 };
 
 void analyze();

@@ -33,7 +33,7 @@ ll rand_below(ll n)
 {
     return floor(random()*n);
 
-
+    /*
     cout <<"Max_size: "<< max_size << "\n";
     if(n>=max_size) return floor(random()*n);
     if(!n) return 0;
@@ -46,6 +46,7 @@ ll rand_below(ll n)
         r=random();
     }
     return (ll)floor(r*max_size)%n;
+    */
 }
 
 ll bisect(double *a,double x,ll lo,ll hi)

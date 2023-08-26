@@ -28,6 +28,8 @@ public:
     bool operator==(Node);
     bool operator!=(Node);
     bool operator<(Node);
+
+    string get_address();
 };
 
 vector<Node> read_node(); //讀文字檔

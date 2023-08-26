@@ -25,7 +25,7 @@ vector<Node> read_node()
     method=false;
     vector<Node> result;
     ifstream file;
-    file.open("nodes3.txt");
+    file.open("benchmark/R101_25.txt");
     string line;
     if(!file.fail())
     {
@@ -36,6 +36,7 @@ vector<Node> read_node()
             result.emplace_back(tmp);
         }
     }
+    file.close();
     sp=result[0];
     return result;
 }
@@ -100,4 +101,8 @@ void Node::print()
 void Node::test()
 {
     address="123";
+}
+
+string Node::get_address() {
+    return address;
 }

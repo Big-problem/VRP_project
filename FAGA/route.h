@@ -22,4 +22,5 @@ public:
     bool operator==(Route);
 
     int get_total_nodes();
+    void print_file(ofstream&);
 };

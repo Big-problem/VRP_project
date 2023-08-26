@@ -28,15 +28,22 @@ int main()
     //system("FAGA.exe");
 
     // Start
-    for(int i=1;i<=10;i++)
-    {
-        cout<<i<<": ";
-        FAGA ans(50,500,200,0.2);
-        ans.run_algo();
-        ans.test();
-        cout<<"\n";
+    ofstream outstream;
+    outstream.open("R101_25_result.txt");
+    if(!outstream.fail()) {
+        for(int i=1;i<=10;i++)
+        {
+            cout<<i<<": ";
+            FAGA ans(50,500,200,0.2);
+            ans.run_algo();
+            ans.test();
+            ans.get_result_file(outstream);
+            cout<<"\n";
+        }
+        outstream.close();
+        analyze();
     }
-    analyze();
+    else cout << "Failed to open file!\n";
     /*FAGA ans(50,500,200,0.2);
     ans.test();*/
     return 0;

@@ -167,3 +167,10 @@ int Solution::get_total_nodes(){
     }
     return ret;
 }
+
+void Solution::get_solution_file(ofstream &outstream) {
+    outstream << "Solution: \n";
+    for(int i = 0; i < total_routes; i++) {
+        routes[i].print_file(outstream);
+    }
+}

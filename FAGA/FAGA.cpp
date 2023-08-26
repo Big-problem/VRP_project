@@ -250,3 +250,7 @@ void analyze()
     cout<<"average:\n";
     cout<<"D = "<<avd<<", K = "<<avk<<", RB = "<<avrb<<"\n\n\n\n";
 }
+
+void FAGA::get_result_file(ofstream &outstream) {
+    ans.get_solution_file(outstream);
+}

@@ -86,6 +86,14 @@ void Route::print()
     cout<<"\ntotal nodes= "<<total_nodes<<", total travel time= "<<total_travel_time<<", capacity= "<<capacity<<"\n";
 }
 
+void Route::print_file(ofstream &outstream) {
+    for(int i=0;i<total_nodes;i++) {
+        if(i) outstream << "->";
+        outstream << nodes[i].get_address();
+    }
+    outstream << "\n";
+}
+
 void Route::remove() //測試用
 {
     remove_node(nodes[2]);
