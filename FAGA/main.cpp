@@ -29,6 +29,7 @@ int main()
 
     // Start
     double res = -1.0;
+    vector<Route> ret;
     for(int i=1;i<=10;i++)
     {
         cout<<i<<": ";
@@ -36,12 +37,16 @@ int main()
         ans.run_algo();
         ans.test();
         if(res < 0 || res > ans.get_total_distance_traveled()){
-            ans.get_result_file();
+            // ans.get_result_file();
+            ret = ans.get_solution();
             res = ans.get_total_distance_traveled();
         }
         cout<<"\n";
     }
     analyze();
+    for(int i = 0; i < ret.size(); ++i){
+        ret[i].print();
+    }
     /*FAGA ans(50,500,200,0.2);
     ans.test();*/
     return 0;

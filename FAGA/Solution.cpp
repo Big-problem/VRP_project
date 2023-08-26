@@ -118,14 +118,14 @@ bool Solution::better(const Solution &a,const Solution&b) //判斷a是否比b好
     return a.route_balance<b.route_balance;
 }
 
-/*Solution &Solution::operator=(const Solution &b)
-{
-    routes=b.routes;
-    total_dist_travelled=b.total_dist_travelled;
-    total_routes=b.total_routes;
-    F1v=b.F1v,F2v=b.F2v,F3v=b.F3v,AFV=b.AFV;
-    route_balance=b.route_balance;
-}*/
+// Solution &Solution::operator=(const Solution &b)
+// {
+//     routes=b.routes;
+//     total_dist_travelled=b.total_dist_travelled;
+//     total_routes=b.total_routes;
+//     F1v=b.F1v,F2v=b.F2v,F3v=b.F3v,AFV=b.AFV;
+//     route_balance=b.route_balance;
+// }
 
 void Solution::sort() //以總負重排序路線
 {

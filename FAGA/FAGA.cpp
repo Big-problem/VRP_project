@@ -264,3 +264,8 @@ double FAGA::get_total_distance_traveled()
 {
     return ans.total_dist_travelled;
 }
+
+vector<Route> FAGA::get_solution()
+{
+    return ans.routes;
+}
