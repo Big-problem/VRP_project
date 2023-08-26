@@ -28,22 +28,20 @@ int main()
     //system("FAGA.exe");
 
     // Start
-    ofstream outstream;
-    outstream.open("R101_25_result.txt");
-    if(!outstream.fail()) {
-        for(int i=1;i<=10;i++)
-        {
-            cout<<i<<": ";
-            FAGA ans(50,500,200,0.2);
-            ans.run_algo();
-            ans.test();
-            ans.get_result_file(outstream);
-            cout<<"\n";
+    double res = -1.0;
+    for(int i=1;i<=10;i++)
+    {
+        cout<<i<<": ";
+        FAGA ans(50,500,200,0.2);
+        ans.run_algo();
+        ans.test();
+        if(res < 0 || res > ans.get_total_distance_traveled()){
+            ans.get_result_file();
+            res = ans.get_total_distance_traveled();
         }
-        outstream.close();
-        analyze();
+        cout<<"\n";
     }
-    else cout << "Failed to open file!\n";
+    analyze();
     /*FAGA ans(50,500,200,0.2);
     ans.test();*/
     return 0;

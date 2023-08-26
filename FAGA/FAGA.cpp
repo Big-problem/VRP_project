@@ -251,6 +251,16 @@ void analyze()
     cout<<"D = "<<avd<<", K = "<<avk<<", RB = "<<avrb<<"\n\n\n\n";
 }
 
-void FAGA::get_result_file(ofstream &outstream) {
-    ans.get_solution_file(outstream);
+void FAGA::get_result_file() {
+    ofstream outstream;
+    outstream.open("R101_25_result.txt");
+    if(!outstream.fail()) {
+        ans.get_solution_file(outstream);
+    }
+    else cout << "Failed to open file!\n";
+}
+
+double FAGA::get_total_distance_traveled()
+{
+    return ans.total_dist_travelled;
 }

@@ -24,7 +24,8 @@ public:
     void test2();
     static void cross_delete(const vector<Node>&,vector<Route>&);
 
-    void get_result_file(ofstream&);
+    void get_result_file();
+    double get_total_distance_traveled();
 
 };
 
