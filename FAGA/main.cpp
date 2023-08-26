@@ -37,16 +37,21 @@ int main()
         ans.run_algo();
         ans.test();
         if(res < 0 || res > ans.get_total_distance_traveled()){
-            // ans.get_result_file();
             ret = ans.get_solution();
             res = ans.get_total_distance_traveled();
         }
         cout<<"\n";
     }
     analyze();
-    for(int i = 0; i < ret.size(); ++i){
-        ret[i].print();
+
+    ofstream outstream;
+    outstream.open("R101_25_result.txt");
+    if(!outstream.fail()){
+        for(int i = 0; i < ret.size(); ++i) {
+            ret[i].print_file(outstream);
+        }
     }
+    else cout << "Failed to open file!\n";
     /*FAGA ans(50,500,200,0.2);
     ans.test();*/
     return 0;

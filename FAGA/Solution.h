@@ -28,7 +28,6 @@ public:
     static bool better(const Solution&,const Solution&);
 
     int get_total_nodes();
-    void get_solution_file(ofstream&);
 };
 
 pair<int,int> best_pos(const vector<tuple<double,int,int>>&);
