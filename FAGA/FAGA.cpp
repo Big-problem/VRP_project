@@ -40,6 +40,44 @@ void FAGA::run_algo()
     ans=sset.sol[sset.total_solution-1];
 }
 
+void FAGA::run_algo2()
+{
+    cout<<"start\n";
+    int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
+
+    for(int i=1;i<=generations;i++)
+    {
+        int tmp_solution_quantity = 0;
+        vector<Solution> children;
+        sset.attribute_calculator();
+        for(int i = 0; i < 3; ++i) {
+            children.push_back(sset.sol[sset.total_solution-1-i]); // 每次都保留前三好的
+            tmp_solution_quantity++;
+        }
+        double a=0.65, b=0.9;
+        while(tmp_solution_quantity < solution_quantity) {
+            double method = random();
+            if(method <= a) {
+                Crossover(children);
+                tmp_solution_quantity += 2;
+            }
+            else if(method <= b) {
+                single_route_mutate(children);
+                tmp_solution_quantity++;
+            }
+        }
+        // for(int j=0;j<crossover_time;j++){
+        //     Crossover(children);
+        // }
+        //sset.sort();
+        solution_replace(children);
+        //cout<<i<<": Done\n";
+    }
+    sset.attribute_calculator();
+    sset.sort();
+    ans=sset.sol[sset.total_solution-1];
+}
+
 void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
 {
     vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,2); // 任挑兩解
@@ -51,9 +89,9 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑
     cross_delete(r1.nodes,cross_pair[0].routes);
 
     BCRC(r0.nodes,cross_pair[1]);
-    if(cross_pair[1].get_total_nodes() < 33) cout << "HELP\n";
+    // if(cross_pair[1].get_total_nodes() < 33) cout << "HELP\n";
     BCRC(r1.nodes,cross_pair[0]);
-    if(cross_pair[0].get_total_nodes() < 33) cout << "HELP\n";
+    // if(cross_pair[0].get_total_nodes() < 33) cout << "HELP\n";
 
     /*cross_pair[0].sort(),cross_pair[1].sort();
     reset();
@@ -70,8 +108,8 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑
     while(!Mutate(b));
     children.emplace_back(a),children.emplace_back(b);*/
 
-    //while(!Mutate(cross_pair[0]));
-    //while(!Mutate(cross_pair[1]));
+    while(!Mutate(cross_pair[0]));
+    while(!Mutate(cross_pair[1]));
 
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
@@ -259,4 +297,34 @@ double FAGA::get_total_distance_traveled()
 vector<Route> FAGA::get_solution()
 {
     return ans.routes;
+}
+
+
+void FAGA::brian_test(){
+    vector<Solution> children;
+    for(int i = 0; i < 20; ++i) single_route_mutate(children);
+}
+
+void FAGA::single_route_mutate(vector<Solution> &children) {
+    Solution child = choice(sset.sol); // 先選一組解
+    child.print();
+    Route mutate_route;
+    int mutate_route_index = -1;
+    int too_many_times = 0;
+    while(mutate_route.total_nodes <= 2) { // 至少一路線node數 > 2, 不然會無限迴圈
+        mutate_route_index = floor(random()*child.total_routes);
+        mutate_route = child.routes[mutate_route_index]; // 再挑一條路線 (node數 > 2)
+        too_many_times++;
+        if(too_many_times >= 100){ // 選不到合法的route, 直接放相同的解
+            children.push_back(child);
+            return;
+        }
+    }
+
+    int mutate_num = min(4, mutate_route.total_nodes-1);
+    cout << "Done\n";
+    mutate_route.print();
+    // 對route.nodes做permutation
+
+
 }

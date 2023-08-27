@@ -14,8 +14,10 @@ private:
 public:
     FAGA(int,int,int,double);
     void run_algo();
+    void run_algo2();
     void Crossover(vector<Solution>&);
     bool Mutate(Solution&);
+    void single_route_mutate(vector<Solution>&);
     bool change(Route,Route,int,int);
     void solution_replace(const vector<Solution>&);
     void BCRC(const vector<Node>&,Solution,int,int,int,int);
@@ -26,6 +28,8 @@ public:
 
     double get_total_distance_traveled();
     vector<Route> get_solution();
+
+    void brian_test();
 };
 
 void analyze();
