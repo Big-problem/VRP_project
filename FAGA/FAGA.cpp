@@ -63,7 +63,7 @@ void FAGA::run_algo2()
                 Crossover(children);
                 tmp_solution_quantity += 2;
             }
-            else if(method <= b) {
+            else if(method <= b) { // 沒成功就直接取消
                 cout << "yes\n";
                 single_route_mutate(children);
                 tmp_solution_quantity++;
@@ -320,7 +320,7 @@ void FAGA::brian_test(){
     // new_solution.print();
 }
 
-void FAGA::single_route_mutate(vector<Solution> &children) {
+void FAGA::single_route_mutate(vector<Solution> &children) { // 看要不要每條都permutation
     Solution child = choice(sset.sol); // 先選一組解
     cout << "Initial soluttion: ";
     child.print();
