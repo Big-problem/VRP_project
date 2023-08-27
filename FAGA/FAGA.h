@@ -30,6 +30,7 @@ public:
     vector<Route> get_solution();
 
     void brian_test();
+    void permutation(Route&, set<string>&, Route, int&, int&, Route&);
 };
 
 void analyze();

@@ -23,4 +23,5 @@ public:
 
     int get_total_nodes();
     void print_file(ofstream&);
+    bool add_node_at_last(Node,int,double);
 };

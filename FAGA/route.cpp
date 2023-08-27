@@ -37,6 +37,27 @@ bool Route::add_node(int index,Node node_to_add,int c,double t) //插入位置�
     return false;
 }
 
+bool Route::add_node_at_last(Node node_to_add,int c,double t)
+{
+    if(nodes.empty()) //起點特判
+    {
+        nodes.emplace_back(node_to_add);
+        total_nodes++;
+        return true;
+    }
+    Node::Node_setting(nodes[total_nodes-1],node_to_add);
+    if(legal(total_nodes,node_to_add,c,t)) //判斷是否合法
+    {
+        nodes.push_back(node_to_add);
+        total_nodes++;
+        capacity+=node_to_add.demand;
+        update(total_nodes); // 感覺沒用
+        total_travel_time=nodes[total_nodes-1].arrival_time+nodes[total_nodes-1].waiting_time+nodes[total_nodes-1].service_time+Node::get_travel_time(nodes[0],nodes[total_nodes-1]);
+        return true;
+    }
+    return false;
+}
+
 bool Route::legal(int index,Node node_to_add,int c,double t) //複製路線資訊後檢查是否違反限制式
 {
     vector<Node> tmp=nodes;
@@ -81,7 +102,7 @@ void Route::print()
         if(i) cout<<"->";
         nodes[i].print();
     }
-    cout<<"\n";
+    // cout<<"\n";
     //for(int i=0;i<total_nodes-1;i++) cout<<Node::get_travel_distance(nodes[i],nodes[i+1])<<"\n";
     cout<<"\ntotal nodes= "<<total_nodes<<", total travel time= "<<total_travel_time<<", capacity= "<<capacity<<"\n";
 }

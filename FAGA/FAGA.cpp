@@ -302,11 +302,13 @@ vector<Route> FAGA::get_solution()
 
 void FAGA::brian_test(){
     vector<Solution> children;
-    for(int i = 0; i < 20; ++i) single_route_mutate(children);
+    // for(int i = 0; i < 20; ++i)single_route_mutate(children);
+    single_route_mutate(children);
 }
 
 void FAGA::single_route_mutate(vector<Solution> &children) {
     Solution child = choice(sset.sol); // 先選一組解
+    cout << "Initial soluttion: ";
     child.print();
     Route mutate_route;
     int mutate_route_index = -1;
@@ -314,6 +316,7 @@ void FAGA::single_route_mutate(vector<Solution> &children) {
     while(mutate_route.total_nodes <= 2) { // 至少一路線node數 > 2, 不然會無限迴圈
         mutate_route_index = floor(random()*child.total_routes);
         mutate_route = child.routes[mutate_route_index]; // 再挑一條路線 (node數 > 2)
+        // cout << "Mutate route index: " << mutate_route_index << "\n";
         too_many_times++;
         if(too_many_times >= 100){ // 選不到合法的route, 直接放相同的解
             children.push_back(child);
@@ -321,10 +324,69 @@ void FAGA::single_route_mutate(vector<Solution> &children) {
         }
     }
 
-    int mutate_num = min(4, mutate_route.total_nodes-1);
-    cout << "Done\n";
+    cout << "The route been chosen: ";
     mutate_route.print();
+
+    int mutate_num = min(4, mutate_route.total_nodes-1); // 決定要重新排列幾個
+    int lower = 1, upper = mutate_route.total_nodes - mutate_num;
+    int start_index = floor(random()*upper) + lower; // 從start_index開始重排
+    // cout << "Start index: " << start_index << ", " << "Mutate num: " << mutate_num << "\n";
+    // cout << "Done\n";
+    // mutate_route.print();
     // 對route.nodes做permutation
+    Route mutate_ans, tmp;
+    set<string> s;
+    for(int i = 0; i < start_index; ++i) {
+        tmp.add_node_at_last(mutate_route.nodes[i], capacity_limit, tmax);
+    }
+    // cout << "Initial tmp: ";
+    // tmp.print();
 
+    permutation(mutate_route, s, tmp, start_index, mutate_num, mutate_ans);
+    
+    cout << "Mutate ans: ";
+    mutate_ans.print();
 
+    child.routes[mutate_route_index] = mutate_ans;
+    child.attribute_calculator();
+    cout << "Updated solutoion\n";
+    child.print();
+    children.push_back(child);
+
+}
+
+void FAGA::permutation(Route &target, set<string> &s, Route tmp, int &start, int &count, Route &ans) {
+    if(tmp.total_nodes == start+count) {
+		for(int i = start+count; i < target.total_nodes; ++i){
+            if(!tmp.add_node_at_last(target.nodes[i], capacity_limit, tmax)) return;
+        }
+
+        // 所有node都加完了
+		// cout << "Tmp ans: ";
+        // tmp.print();
+
+        if(ans.total_travel_time == 0 || ans.total_travel_time > tmp.total_travel_time) {
+            ans = tmp; // 新路線travel_time短就替換
+        }
+		return;
+	}
+	// cout << "go\n";
+	for(int i = start; i < start+count; ++i) {
+		// cout << "in\n";
+		if(s.find(target.nodes[i].address) == s.end()){
+			// cout << "add\n";
+            if(tmp.add_node_at_last(target.nodes[i], capacity_limit, tmax)) {
+                s.insert(target.nodes[i].address);
+                permutation(target, s, tmp, start, count, ans);
+                s.erase(target.nodes[i].address);
+                tmp.remove_node(target.nodes[i]);
+            }
+            // else{
+            //     cout << "Illegal: ";
+            //     tmp.print();
+            //     target.nodes[i].print();
+            //     cout << "\n";
+            // }
+		}
+	}
 }
