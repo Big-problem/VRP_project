@@ -51,11 +51,12 @@ void FAGA::run_algo2()
         vector<Solution> children;
         sset.attribute_calculator();
         sset.sort();
-        for(int i = 0; i < 3; ++i) {
+        for(int i = 0; i < 1; ++i) {
             children.push_back(sset.sol[sset.total_solution-1-i]); // 每次都保留前三好的
+            // cout << "Go: " << sset.sol[sset.total_solution-1-i].AFV <<"\n";
             tmp_solution_quantity++;
         }
-        double a=0.65, b=0.9;
+        double a=0.8, b=0.9;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
             if(tmp_solution_quantity <= solution_quantity-2 && method <= a) {
@@ -63,6 +64,7 @@ void FAGA::run_algo2()
                 tmp_solution_quantity += 2;
             }
             else if(method <= b) {
+                cout << "yes\n";
                 single_route_mutate(children);
                 tmp_solution_quantity++;
             }
@@ -311,10 +313,11 @@ void FAGA::brian_test(){
     vector<Solution> children;
     // for(int i = 0; i < 20; ++i)single_route_mutate(children);
     single_route_mutate(children);
-    Solution new_solution;
-    cout << "\n\n";
-    new_solution.gen_solution(capacity_limit, node_list);
-    new_solution.print();
+    
+    // Solution new_solution;
+    // cout << "\n\n";
+    // new_solution.gen_solution(capacity_limit, node_list);
+    // new_solution.print();
 }
 
 void FAGA::single_route_mutate(vector<Solution> &children) {
@@ -342,7 +345,7 @@ void FAGA::single_route_mutate(vector<Solution> &children) {
     int mutate_num = min(4, mutate_route.total_nodes-1); // 決定要重新排列幾個
     int lower = 1, upper = mutate_route.total_nodes - mutate_num;
     int start_index = floor(random()*upper) + lower; // 從start_index開始重排
-    cout << "Start index: " << start_index << ", " << "Mutate num: " << mutate_num << "\n";
+    // cout << "Start index: " << start_index << ", " << "Mutate num: " << mutate_num << "\n";
     // cout << "Done\n";
     // mutate_route.print();
     // 對route.nodes做permutation
@@ -364,6 +367,7 @@ void FAGA::single_route_mutate(vector<Solution> &children) {
     child.attribute_calculator();
     cout << "Updated solutoion\n";
     child.print();
+    if(mutate_route.total_distance() > mutate_ans.total_distance()) cout << "###############\n";
     children.push_back(child);
 
 }
