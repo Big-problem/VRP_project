@@ -11,10 +11,11 @@ bool decide(double);
 ll bisect(double*,double,ll,ll);
 ll rand_below(ll);
 
+const ll one=1;
 const double allowance_rate=1.2; //寬放率
 const double RECIP_BPF=pow(2,-BPF);
-// const ll max_size = 1 << BPF; // Useless
-const ll max_size = 0; // Useless
+const ll max_size = one << BPF; // Useless
+// const ll max_size = 0; // Useless
 extern bool check;
 
 template<typename T>
