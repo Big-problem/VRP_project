@@ -13,4 +13,7 @@ public:
     void attribute_calculator();
     void sort();
     void print();
+
+    void add_solution(Solution&);
+    void print_best();
 };

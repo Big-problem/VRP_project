@@ -10,7 +10,9 @@ Population::Population(int z,int c,const vector<Node> &v)
 
 Population::Population()
 {
-    return;
+    sol.clear();
+    total_solution=0;
+    crossover_probability=nullptr;
 }
 
 void Population::attribute_calculator() //計算適應度和Pc
@@ -64,4 +66,17 @@ void Population::print()
         cout<<i.AFV<<" "<<i.F3v<<" "<<i.F1v<<" "<<i.F2v<<"\n";
     }
     cout<<"\n";
+}
+
+void Population::add_solution(Solution &s)
+{
+    sol.push_back(s);
+    total_solution++;
+}
+
+void Population::print_best()
+{
+    attribute_calculator();
+    sort();
+    sol[total_solution-1].print();
 }

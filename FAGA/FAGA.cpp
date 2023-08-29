@@ -4,10 +4,13 @@ int replace_quantity=10;
 int fail_count=0;
 vector<Solution> buffer;
 Solution target;
+Population final_answers;
 
 vector<double> dist;
 vector<int> K;
 vector<double> RB;
+
+int brian_property, brian_impossible, hhhhh;
 
 FAGA::FAGA(int z,int g,int c,double pm)
 {
@@ -42,8 +45,13 @@ void FAGA::run_algo()
 
 void FAGA::run_algo2()
 {
+    brian_property = 0;
+    brian_impossible = 0;
+
     cout<<"start\n";
     int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
+
+    int abc = 0, def = 0, ghi = 0;
 
     for(int i=1;i<=generations;i++)
     {
@@ -56,19 +64,30 @@ void FAGA::run_algo2()
             // cout << "Go: " << sset.sol[sset.total_solution-1-i].AFV <<"\n";
             tmp_solution_quantity++;
         }
-        double a=0.8, b=0.9;
+        double a=1.0, b=1;
+        hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
             if(tmp_solution_quantity <= solution_quantity-2 && method <= a) {
                 Crossover(children);
                 tmp_solution_quantity += 2;
+                def++;
             }
             else if(method <= b) { // 沒成功就直接取消
-                cout << "yes\n";
-                single_route_mutate(children);
-                tmp_solution_quantity++;
+                if(single_route_mutate(children)){
+                    tmp_solution_quantity++;
+                }
+                else if(tmp_solution_quantity == solution_quantity-1) { // do not find a better solution
+                    hhhhh++;
+                    if(hhhhh >= 100){
+                        children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
+                        tmp_solution_quantity++;
+                    }
+                }
+                abc++;
             }
             else{
+                ghi++;
                 Solution new_solution;
                 new_solution.gen_solution(capacity_limit, node_list);
                 children.push_back(new_solution);
@@ -85,6 +104,8 @@ void FAGA::run_algo2()
     sset.attribute_calculator();
     sset.sort();
     ans=sset.sol[sset.total_solution-1];
+    cout << "ccc: " << abc << ", def: "<<def<< ", ghi: "<<ghi<<"\n";
+    cout << "Brian property: " << brian_property <<", impossible: "<<brian_impossible <<"\n";
 }
 
 void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
@@ -259,6 +280,8 @@ void FAGA::test()
     K.emplace_back(ans.total_routes);
     RB.emplace_back(ans.route_balance);
     ans.print();
+
+    final_answers.add_solution(ans);
 }
 
 void FAGA::test2()
@@ -296,6 +319,10 @@ void analyze()
     cout<<"D = "<<dist[0]<<", K = "<<K[0]<<", RB = "<<RB[0]<<"\n\n";
     cout<<"average:\n";
     cout<<"D = "<<avd<<", K = "<<avk<<", RB = "<<avrb<<"\n\n\n\n";
+
+    cout << "Final answer: \n";
+    final_answers.print_best();
+
 }
 
 double FAGA::get_total_distance_traveled()
@@ -303,9 +330,9 @@ double FAGA::get_total_distance_traveled()
     return ans.total_dist_travelled;
 }
 
-vector<Route> FAGA::get_solution()
+Solution FAGA::get_solution()
 {
-    return ans.routes;
+    return ans;
 }
 
 
@@ -320,10 +347,10 @@ void FAGA::brian_test(){
     // new_solution.print();
 }
 
-void FAGA::single_route_mutate(vector<Solution> &children) { // 看要不要每條都permutation
+int FAGA::single_route_mutate(vector<Solution> &children) { // 看要不要每條都permutation
     Solution child = choice(sset.sol); // 先選一組解
-    cout << "Initial soluttion: ";
-    child.print();
+    // cout << "Initial soluttion: ";
+    // child.print();
     Route mutate_route;
     int mutate_route_index = -1;
     int too_many_times = 0;
@@ -334,13 +361,15 @@ void FAGA::single_route_mutate(vector<Solution> &children) { // 看要不要每�
         too_many_times++;
         if(too_many_times >= 100){ // 選不到合法的route, 直接放相同的解
             children.push_back(child);
-            return;
+            brian_impossible++;
+            brian_property++;
+            return 1;
         }
     }
 
-    cout << "The route been chosen: ";
-    mutate_route.print();
-    cout << mutate_route.total_distance() << "\n";
+    // cout << "The route been chosen: ";
+    // mutate_route.print();
+    // cout << mutate_route.total_distance() << "\n";
 
     int mutate_num = min(4, mutate_route.total_nodes-1); // 決定要重新排列幾個
     int lower = 1, upper = mutate_route.total_nodes - mutate_num;
@@ -359,16 +388,22 @@ void FAGA::single_route_mutate(vector<Solution> &children) { // 看要不要每�
 
     permutation(mutate_route, s, tmp, start_index, mutate_num, mutate_ans);
     
-    cout << "Mutate ans: ";
-    mutate_ans.print();
-    cout << mutate_ans.total_distance() << "\n";
+    // cout << "Mutate ans: ";
+    // mutate_ans.print();
+    // cout << mutate_ans.total_distance() << "\n";
+
+    if(mutate_route.total_distance() <= mutate_ans.total_distance()){
+        return 0;
+    }
 
     child.routes[mutate_route_index] = mutate_ans;
     child.attribute_calculator();
-    cout << "Updated solutoion\n";
-    child.print();
-    if(mutate_route.total_distance() > mutate_ans.total_distance()) cout << "###############\n";
+    // cout << "Updated solutoion\n";
+    // child.print();
+    
     children.push_back(child);
+    brian_property++;
+    return 1;
 
 }
 

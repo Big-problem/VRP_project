@@ -17,7 +17,7 @@ public:
     void run_algo2();
     void Crossover(vector<Solution>&);
     bool Mutate(Solution&);
-    void single_route_mutate(vector<Solution>&);
+    int single_route_mutate(vector<Solution>&);
     bool change(Route,Route,int,int);
     void solution_replace(const vector<Solution>&);
     void BCRC(const vector<Node>&,Solution,int,int,int,int);
@@ -27,7 +27,7 @@ public:
     static void cross_delete(const vector<Node>&,vector<Route>&);
 
     double get_total_distance_traveled();
-    vector<Route> get_solution();
+    Solution get_solution();
 
     void brian_test();
     void permutation(Route&, set<string>&, Route, int&, int&, Route&);
