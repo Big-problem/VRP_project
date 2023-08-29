@@ -11,8 +11,10 @@ def get_info(): # 讀address跟position
 def draw(d):
     plt.figure(figsize=(5, 3), dpi=150)
 
-    with open('../FAGA/R101_25_result.txt') as f:
+    with open('../FAGA/result/R102_25_result.txt') as f:
         for count, route in enumerate(f.readlines()):
+            if route == "\n":
+                break
             tmp = route.split('->')            
             x, y = [], []
             for i in map(lambda x: int(x.strip()), tmp):
@@ -26,7 +28,7 @@ def draw(d):
     plt.xlabel('X Axis')
     plt.ylabel('Y Axis')
 
-    plt.legend()
+    plt.legend(fontsize=5)
     plt.show()
 
 

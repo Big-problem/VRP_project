@@ -31,6 +31,7 @@ void FAGA::run_algo()
     {
         vector<Solution> children;
         sset.attribute_calculator();
+
         for(int j=0;j<crossover_time;j++){
             Crossover(children);
         }
@@ -59,12 +60,13 @@ void FAGA::run_algo2()
         vector<Solution> children;
         sset.attribute_calculator();
         sset.sort();
-        for(int i = 0; i < 1; ++i) {
-            children.push_back(sset.sol[sset.total_solution-1-i]); // 每次都保留前三好的
-            // cout << "Go: " << sset.sol[sset.total_solution-1-i].AFV <<"\n";
-            tmp_solution_quantity++;
+        for(int j = 0; j < 1; ++j) {
+            // children.push_back(sset.sol[sset.total_solution-1-j]); // 每次都保留前三好的
+            // cout << "Go: " <<i<<"\n";
+            // sset.sol[sset.total_solution-1-3].print();
+            // tmp_solution_quantity++;
         }
-        double a=1.0, b=1;
+        double a=2.0;
         hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
@@ -73,7 +75,7 @@ void FAGA::run_algo2()
                 tmp_solution_quantity += 2;
                 def++;
             }
-            else if(method <= b) { // 沒成功就直接取消
+            else{ // 沒成功就直接取消
                 if(single_route_mutate(children)){
                     tmp_solution_quantity++;
                 }
@@ -85,13 +87,6 @@ void FAGA::run_algo2()
                     }
                 }
                 abc++;
-            }
-            else{
-                ghi++;
-                Solution new_solution;
-                new_solution.gen_solution(capacity_limit, node_list);
-                children.push_back(new_solution);
-                tmp_solution_quantity++;
             }
         }
         // for(int j=0;j<crossover_time;j++){

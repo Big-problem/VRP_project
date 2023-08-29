@@ -78,5 +78,18 @@ void Population::print_best()
 {
     attribute_calculator();
     sort();
-    sol[total_solution-1].print();
+    Solution best_solution = sol[total_solution-1];
+    best_solution.print();
+
+    // Get the result file
+    ofstream outstream;
+    outstream.open("result/R102_25_result.txt");
+    if(!outstream.fail()){
+        for(int i = 0; i < best_solution.routes.size(); ++i) {
+            best_solution.routes[i].print_file(outstream);
+        }
+        outstream << "\n";
+        outstream << "Total distance traveled: " << best_solution.total_dist_travelled << ", Number of vehicle: " << best_solution.total_routes << ", route balance: " << best_solution.route_balance << "\n";
+    }
+    else cout << "Failed to open file!\n";
 }

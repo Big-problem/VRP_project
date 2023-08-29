@@ -104,7 +104,7 @@ void Route::print()
     }
     // cout<<"\n";
     //for(int i=0;i<total_nodes-1;i++) cout<<Node::get_travel_distance(nodes[i],nodes[i+1])<<"\n";
-    cout<<"\ntotal nodes= "<<total_nodes<<", total travel time= "<<total_travel_time<<", capacity= "<<capacity<<"\n";
+    cout<<"\ntotal nodes= "<<total_nodes<<", total distance= "<< total_distance() <<", capacity= "<<capacity<<"\n";
 }
 
 void Route::print_file(ofstream &outstream) {
