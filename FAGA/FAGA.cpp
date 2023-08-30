@@ -63,10 +63,10 @@ void FAGA::run_algo2()
         for(int j = 0; j < 1; ++j) {
             // children.push_back(sset.sol[sset.total_solution-1-j]); // 每次都保留前三好的
             // cout << "Go: " <<i<<"\n";
-            // sset.sol[sset.total_solution-1-3].print();
+            // sset.sol[sset.total_solution-1].print();
             // tmp_solution_quantity++;
         }
-        double a=2.0;
+        double a=0.9;
         hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
@@ -83,6 +83,7 @@ void FAGA::run_algo2()
                     hhhhh++;
                     if(hhhhh >= 100){
                         children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
+                        cout << "SAD!!\n";
                         tmp_solution_quantity++;
                     }
                 }
