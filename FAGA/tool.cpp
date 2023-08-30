@@ -31,8 +31,14 @@ bool decide(double p)
 
 ll rand_below(ll n)
 {
-    return floor(random()*n);
-
+    // return floor(random()*n);
+    if(n>=max_size) return floor(random()*n);
+    if(!n) return 0;
+    ll rem=max_size%n;
+    double limit=(max_size*1.0-rem)/max_size;
+    double r=random();
+    while(r>=limit) r=random();
+    return (ll)floor(r*max_size)%n;
     /*
     cout <<"Max_size: "<< max_size << "\n";
     if(n>=max_size) return floor(random()*n);

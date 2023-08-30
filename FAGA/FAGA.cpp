@@ -31,6 +31,8 @@ void FAGA::run_algo()
     {
         vector<Solution> children;
         sset.attribute_calculator();
+        
+        // sset.sort();
 
         for(int j=0;j<crossover_time;j++){
             Crossover(children);
@@ -66,11 +68,11 @@ void FAGA::run_algo2()
             // sset.sol[sset.total_solution-1].print();
             // tmp_solution_quantity++;
         }
-        double a=0.9;
+        double a=0.85;
         hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
-            if(tmp_solution_quantity <= solution_quantity-2 && method <= a) {
+            if(i <= 400 || tmp_solution_quantity <= solution_quantity-2 && method <= a) {
                 Crossover(children);
                 tmp_solution_quantity += 2;
                 def++;
