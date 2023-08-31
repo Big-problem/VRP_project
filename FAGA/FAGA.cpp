@@ -63,12 +63,12 @@ void FAGA::run_algo2()
         vector<Solution> children;
         sset.attribute_calculator();
         // sset.sort();
-        if(i > 1){
-            children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
+        // if(i > 1){
+            // children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
             // cout << "Go: " <<i<<"\n";
             // sset.sol[sset.total_solution-1].print();
-            tmp_solution_quantity++;
-        }
+            // tmp_solution_quantity++;
+        // }
         double a=0.85;
         hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
@@ -86,7 +86,7 @@ void FAGA::run_algo2()
                     hhhhh++;
                     if(hhhhh >= 100){
                         children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
-                        cout << "SAD!!\n";
+                        // cout << "SAD!!\n";
                         tmp_solution_quantity++;
                     }
                 }

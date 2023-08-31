@@ -10,7 +10,7 @@ int main()
     {
         cout<<i<<": ";
         FAGA ans(50,500,200,0.2);
-        ans.run_algo2();
+        ans.run_algo();
         ans.test();
         // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
         //     best_solution = ans.get_solution();
