@@ -25,7 +25,7 @@ vector<Node> read_node()
     method=false;
     vector<Node> result;
     ifstream file;
-    file.open("../benchmark/R101_25.txt");
+    file.open("../benchmark/C1/C101_25.txt");
     string line;
     if(!file.fail())
     {

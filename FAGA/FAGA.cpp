@@ -56,23 +56,24 @@ void FAGA::run_algo2()
 
     int abc = 0, def = 0, ghi = 0;
 
+    vector<Solution> children_tmp;
     for(int i=1;i<=generations;i++)
     {
         int tmp_solution_quantity = 0;
         vector<Solution> children;
         sset.attribute_calculator();
-        sset.sort();
-        for(int j = 0; j < 1; ++j) {
-            // children.push_back(sset.sol[sset.total_solution-1-j]); // 每次都保留前三好的
+        // sset.sort();
+        if(i > 1){
+            children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
             // cout << "Go: " <<i<<"\n";
             // sset.sol[sset.total_solution-1].print();
-            // tmp_solution_quantity++;
+            tmp_solution_quantity++;
         }
         double a=0.85;
         hhhhh = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
-            if(i <= 400 || tmp_solution_quantity <= solution_quantity-2 && method <= a) {
+            if(tmp_solution_quantity <= solution_quantity-2 && method <= a) {
                 Crossover(children);
                 tmp_solution_quantity += 2;
                 def++;
@@ -97,6 +98,8 @@ void FAGA::run_algo2()
         // }
         //sset.sort();
         solution_replace(children);
+        children_tmp = children;
+        sort(children_tmp.begin(),children_tmp.end());
         //cout<<i<<": Done\n";
     }
     sset.attribute_calculator();
