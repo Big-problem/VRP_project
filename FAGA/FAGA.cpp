@@ -10,7 +10,7 @@ vector<double> dist;
 vector<int> K;
 vector<double> RB;
 
-int brian_property, brian_impossible, hhhhh;
+int brian_property, brian_impossible;
 
 FAGA::FAGA(int z,int g,int c,double pm, int target_num)
 {
