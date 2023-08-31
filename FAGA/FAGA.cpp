@@ -51,10 +51,10 @@ void FAGA::run_algo2()
     brian_property = 0;
     brian_impossible = 0;
 
-    cout<<"start\n";
+    // cout<<"start\n";
     int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
 
-    int abc = 0, def = 0, ghi = 0;
+    // int abc = 0, def = 0, ghi = 0;
 
     vector<Solution> children_tmp;
     for(int i=1;i<=generations;i++)
@@ -69,28 +69,29 @@ void FAGA::run_algo2()
             // sset.sol[sset.total_solution-1].print();
             // tmp_solution_quantity++;
         // }
-        double a=0.85;
-        hhhhh = 0;
+        double a=0.9;
+        int no_other_sol = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
             if(tmp_solution_quantity <= solution_quantity-2 && method <= a) {
                 Crossover(children);
                 tmp_solution_quantity += 2;
-                def++;
+                // def++;
             }
             else{ // 沒成功就直接取消
-                if(single_route_mutate(children)){
+                if(Mutate2(children)){
                     tmp_solution_quantity++;
                 }
                 else if(tmp_solution_quantity == solution_quantity-1) { // do not find a better solution
-                    hhhhh++;
-                    if(hhhhh >= 100){
-                        children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
-                        // cout << "SAD!!\n";
+                    no_other_sol++;
+                    if(no_other_sol >= 100){
+                        // children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
+                        children.push_back(children_tmp[solution_quantity-1]);
+                        cout << "SAD!!\n";
                         tmp_solution_quantity++;
                     }
                 }
-                abc++;
+                // abc++;
             }
         }
         // for(int j=0;j<crossover_time;j++){
@@ -105,8 +106,8 @@ void FAGA::run_algo2()
     sset.attribute_calculator();
     sset.sort();
     ans=sset.sol[sset.total_solution-1];
-    cout << "ccc: " << abc << ", def: "<<def<< ", ghi: "<<ghi<<"\n";
-    cout << "Brian property: " << brian_property <<", impossible: "<<brian_impossible <<"\n";
+    // cout << "ccc: " << abc << ", def: "<<def<< ", ghi: "<<ghi<<"\n";
+    // cout << "Brian property: " << brian_property <<", impossible: "<<brian_impossible <<"\n";
 }
 
 void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
@@ -139,8 +140,8 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑
     while(!Mutate(b));
     children.emplace_back(a),children.emplace_back(b);*/
 
-    while(!Mutate(cross_pair[0]));
-    while(!Mutate(cross_pair[1]));
+    // while(!Mutate(cross_pair[0]));
+    // while(!Mutate(cross_pair[1]));
 
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
@@ -234,13 +235,40 @@ bool FAGA::Mutate(Solution &s)
         if(!c0.size()||!c1.size()) return false;
 
         Node n0=choice(c0),n1=choice(c1);
-        int p0=find(v[0].nodes.begin(),v[0].nodes.end(),n0)-v[0].nodes.begin(), p1=find(v[1].nodes.begin(),v[1].nodes.end(),n1)-v[1].nodes.begin();
+        int p0=find(v[0].nodes.begin(),v[0].nodes.end(),n0)-v[0].nodes.begin(), p1=find(v[1].nodes.begin(),v[1].nodes.end(),n1)-v[1].nodes.begin(); // 找n0, n1的位置
         if(!change(v[0],v[1],p0,p1)) return false; //檢查兩點位置是否可以互換
         auto p2=find(s.routes.begin(),s.routes.end(),v[0]), p3=find(s.routes.begin(),s.routes.end(),v[1]);
         p2->remove_node(n0),p3->remove_node(n1);
         p2->add_node(p0,n1,capacity_limit,tmax);
         p3->add_node(p1,n0,capacity_limit,tmax);
     }
+    return true;
+}
+
+bool FAGA::Mutate2(vector<Solution> &children)
+{
+    Solution s = choice(sset.sol);
+    // s.print();
+    // if(decide(mutation_probability))
+    // {
+    vector<Route> v=choices(s.routes,nullptr,nullptr,2); // 挑兩條路線
+    if(v[0]==v[1]) return false;
+
+    vector<Node> c0=v[0].nodes,c1=v[1].nodes;
+    c0.erase(c0.begin()),c1.erase(c1.begin()); //刪除起點
+    if(!c0.size()||!c1.size() || (c0.size()==c1.size()&&c1.size()==1)) return false;
+
+    Node n0=choice(c0),n1=choice(c1);
+    int p0=find(v[0].nodes.begin(),v[0].nodes.end(),n0)-v[0].nodes.begin(), p1=find(v[1].nodes.begin(),v[1].nodes.end(),n1)-v[1].nodes.begin(); // 找n0, n1的位置
+    if(!change(v[0],v[1],p0,p1)) return false; //檢查兩點位置是否可以互換
+    auto p2=find(s.routes.begin(),s.routes.end(),v[0]), p3=find(s.routes.begin(),s.routes.end(),v[1]);
+    p2->remove_node(n0),p3->remove_node(n1);
+    p2->add_node(p0,n1,capacity_limit,tmax);
+    p3->add_node(p1,n0,capacity_limit,tmax);
+    // }
+    children.push_back(s);
+    // s.attribute_calculator();
+    // s.print();
     return true;
 }
 
@@ -340,8 +368,8 @@ Solution FAGA::get_solution()
 void FAGA::brian_test(){
     vector<Solution> children;
     // for(int i = 0; i < 20; ++i)single_route_mutate(children);
-    single_route_mutate(children);
-    
+    // single_route_mutate(children);
+    cout << Mutate2(children);
     // Solution new_solution;
     // cout << "\n\n";
     // new_solution.gen_solution(capacity_limit, node_list);

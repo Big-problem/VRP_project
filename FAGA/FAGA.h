@@ -17,6 +17,7 @@ public:
     void run_algo2();
     void Crossover(vector<Solution>&);
     bool Mutate(Solution&);
+    bool Mutate2(vector<Solution>&);
     int single_route_mutate(vector<Solution>&);
     bool change(Route,Route,int,int);
     void solution_replace(const vector<Solution>&);
