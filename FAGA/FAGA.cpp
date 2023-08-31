@@ -12,15 +12,17 @@ vector<double> RB;
 
 int brian_property, brian_impossible, hhhhh;
 
-FAGA::FAGA(int z,int g,int c,double pm)
+FAGA::FAGA(int z,int g,int c,double pm, int target_num)
 {
     node_list=read_node();
     pop_size=z;
-    sset=Population(z,c,node_list);
+    sset=Population(z,c,node_list, target_num);
     capacity_limit=c;
     generations=g;
     tmax=node_list[0].due_time;
     mutation_probability=pm;
+
+    final_answers.target = target_num;
 }
 
 void FAGA::run_algo()
@@ -30,7 +32,7 @@ void FAGA::run_algo()
     for(int i=1;i<=generations;i++)
     {
         vector<Solution> children;
-        sset.attribute_calculator();
+        sset.attribute_calculator2();
         
         // sset.sort();
 
@@ -41,8 +43,14 @@ void FAGA::run_algo()
         solution_replace(children);
         //cout<<i<<": Done\n";
     }
-    sset.attribute_calculator();
+    sset.attribute_calculator2();
     sset.sort();
+    for(int i = 0; i < 5; ++i){
+        // children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
+        cout << "Go: " <<i<<"\n";
+        sset.sol[sset.total_solution-1-i].print();
+        // tmp_solution_quantity++;
+    }
     ans=sset.sol[sset.total_solution-1];
 }
 
@@ -56,12 +64,12 @@ void FAGA::run_algo2()
 
     // int abc = 0, def = 0, ghi = 0;
 
-    vector<Solution> children_tmp;
+    // vector<Solution> children_tmp;
     for(int i=1;i<=generations;i++)
     {
         int tmp_solution_quantity = 0;
         vector<Solution> children;
-        sset.attribute_calculator();
+        sset.attribute_calculator2();
         // sset.sort();
         // if(i > 1){
             // children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
@@ -86,7 +94,11 @@ void FAGA::run_algo2()
                     no_other_sol++;
                     if(no_other_sol >= 100){
                         // children.push_back(sset.sol[sset.total_solution-1]); // 再放原本的最佳解
-                        children.push_back(children_tmp[solution_quantity-1]);
+                        // children.push_back(children_tmp[solution_quantity-1]);
+                        if(final_answers.total_solution == 0){
+                            children.push_back(sset.sol[sset.total_solution-1]);
+                        }
+                        else children.push_back(final_answers.sol[final_answers.total_solution-1]);
                         cout << "SAD!!\n";
                         tmp_solution_quantity++;
                     }
@@ -99,11 +111,14 @@ void FAGA::run_algo2()
         // }
         //sset.sort();
         solution_replace(children);
-        children_tmp = children;
-        sort(children_tmp.begin(),children_tmp.end());
+        // children_tmp = children;
+        // sort(children_tmp.begin(),children_tmp.end());
+        // cout <<"TMP\n";
+        // for(int i = 0;i  < 5; ++i) children_tmp[solution_quantity-1-i].print();
+        // cout<<"TMP DONE\n";
         //cout<<i<<": Done\n";
     }
-    sset.attribute_calculator();
+    sset.attribute_calculator2();
     sset.sort();
     ans=sset.sol[sset.total_solution-1];
     // cout << "ccc: " << abc << ", def: "<<def<< ", ghi: "<<ghi<<"\n";
@@ -366,10 +381,21 @@ Solution FAGA::get_solution()
 
 
 void FAGA::brian_test(){
-    vector<Solution> children;
+    cout << "EEEEEEEEEEEEEEEEEEEEEEEEE: "<<sset.target<<"\n";
+    sset.attribute_calculator2();
+    sset.sort();
+    for(int i = 0; i < 30; ++i){
+        // children.push_back(children_tmp[solution_quantity-1]); // 每次都保留前三好的
+        cout << "Go: " <<i<<"\n";
+        sset.sol[sset.total_solution-1-i].print();
+        // tmp_solution_quantity++;
+    }
+
+    // vector<Solution> children;
+    
     // for(int i = 0; i < 20; ++i)single_route_mutate(children);
     // single_route_mutate(children);
-    cout << Mutate2(children);
+    // cout << Mutate2(children);
     // Solution new_solution;
     // cout << "\n\n";
     // new_solution.gen_solution(capacity_limit, node_list);

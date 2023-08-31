@@ -7,6 +7,14 @@ Solution::Solution() // constructor
     total_routes=0;
 }
 
+Solution::Solution(int target_num) // constructor
+{
+    routes.clear();
+    total_dist_travelled=0.0;
+    total_routes=0;
+    target = target_num;
+}
+
 void Solution::add_new_route(Node start,int c,double t) // 新增路線到解答
 {
     Route new_route;
@@ -90,16 +98,30 @@ vector<Solution> gen_population(int z,int c,const vector<Node> &v) // generate z
     return result;
 }
 
+vector<Solution> gen_population2(int z,int c,const vector<Node> &v, int target) // generate z numbers of initial solutions
+{
+    vector<Solution> result(z);
+    for(int i=0;i<z;i++)
+    {
+        result[i]=Solution(target);
+        result[i].gen_solution(c,v);
+        // result[i].print();
+    }
+    // cout << 123456789<<"\n";
+    // for(auto i:result) i.print();
+    return result;
+}
+
 void Solution::print()
 {
     cout<<"\n";
     for(int i=0;i<total_routes;i++)
     {
-        routes[i].print();
+        // routes[i].print();
         //cout<<routes.size()<<" "<<total_routes<<"\n";
         //cout<<"\n";
     }
-    cout<<"total dist= "<<total_dist_travelled<<", total routes= "<<total_routes<<", RB= "<<route_balance<<"\n";
+    cout<<"AFV: "<<AFV<<", total dist= "<<total_dist_travelled<<", total routes= "<<total_routes<<", RB= "<<route_balance<<"\n";
 }
 
 bool Solution::operator<(Solution b)
@@ -111,9 +133,15 @@ bool Solution::operator<(Solution b)
         if(AFV==b.AFV) return F1v<b.F1v;
         return AFV<b.AFV;
     }
+    else if(target == 2){
+        if(AFV==b.AFV&&F1v==b.F1v) return F2v<b.F2v;
+        if(AFV==b.AFV) return F1v<b.F1v;
+        return AFV<b.AFV;
+    }
+    return AFV<b.AFV;
 }
 
-bool Solution::better(const Solution &a,const Solution&b) //判斷a是否比b好
+bool Solution::better(const Solution &a,const Solution&b) //判斷a是否比b好 (應該都註解掉了所以沒改)
 {
     if(a.route_balance==b.route_balance&&a.total_dist_travelled==b.total_dist_travelled) return a.total_routes<b.total_routes;
     if(a.route_balance==b.route_balance) return a.total_dist_travelled<b.total_dist_travelled;

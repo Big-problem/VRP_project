@@ -17,6 +17,7 @@ private:
     friend void BCRC(const vector<Node>&,Solution,int,int,int,int,int,double);
 public:
     Solution();
+    Solution(int);
     void add_new_route(Node,int,double);
     void gen_solution(int,const vector<Node>&);
     void attribute_calculator();
@@ -33,3 +34,5 @@ public:
 
 pair<int,int> best_pos(const vector<tuple<double,int,int>>&);
 vector<Solution> gen_population(int,int,const vector<Node>&);
+
+vector<Solution> gen_population2(int,int,const vector<Node>&, int);

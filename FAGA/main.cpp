@@ -9,7 +9,7 @@ int main()
     for(int i=1;i<=10;i++)
     {
         cout<<i<<": ";
-        FAGA ans(50,500,200,0.2);
+        FAGA ans(50,500,200,0.2, 2);
         ans.run_algo();
         ans.test();
         // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
@@ -32,9 +32,9 @@ int main()
     // }
     // else cout << "Failed to open file!\n";
 
-    return 0;
+    // return 0;
 
 
-    // FAGA a(50,100,500,0.2);
+    // FAGA a(50,100,500,0.2, 2);
     // a.brian_test();
 }

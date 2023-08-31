@@ -12,7 +12,7 @@ private:
     double mutation_probability;
     Solution ans;
 public:
-    FAGA(int,int,int,double);
+    FAGA(int,int,int,double, int);
     void run_algo();
     void run_algo2();
     void Crossover(vector<Solution>&);

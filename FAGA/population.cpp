@@ -1,11 +1,13 @@
 #include "population.h"
 
-Population::Population(int z,int c,const vector<Node> &v)
+Population::Population(int z,int c,const vector<Node> &v, int target_num)
 {
     sol.clear();
     total_solution=z;
-    sol=gen_population(z,c,v);
+    // sol=gen_population(z,c,v);
+    sol=gen_population2(z,c,v, target);
     crossover_probability=nullptr;
+    target = target_num;
 }
 
 Population::Population()
@@ -44,7 +46,7 @@ void Population::attribute_calculator() //計算適應度和Pc
     for(int i=0;i<total_solution;i++) crossover_probability[i]=sol[i].AFV/total_AFV;
 }
 
-void Population::attribute_calculator2(int target) //計算適應度和Pc
+void Population::attribute_calculator2() //計算適應度和Pc (用target決定要用幾種property決定好壞)
 {
     double dmax,dmin,RBmax,RBmin,a,b,c,total_AFV=0.0;
     int Kmax=INT_MIN,Kmin=INT_MAX;
@@ -117,14 +119,16 @@ void Population::add_solution(Solution &s)
 
 void Population::print_best()
 {
-    attribute_calculator();
+    attribute_calculator2();
     sort();
     Solution best_solution = sol[total_solution-1];
     best_solution.print();
 
+    for(int i = 0; i < 5; ++i) sol[total_solution-1-i].print();
+
     // Get the result file
     ofstream outstream;
-    outstream.open("../result/C1/C101_100_result.txt");
+    outstream.open("../result/R107_100_result.txt");
     if(!outstream.fail()){
         for(int i = 0; i < best_solution.routes.size(); ++i) {
             best_solution.routes[i].print_file(outstream);

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def get_info(): # 讀address跟position
-    with open('../benchmark/C1/C101_100.txt') as f:
+    with open('../benchmark/R107_100.txt') as f:
         d = {}
         for info in f.readlines():
             tmp = info.split(';')[:3]
@@ -11,7 +11,7 @@ def get_info(): # 讀address跟position
 def draw(d):
     plt.figure(figsize=(5, 3), dpi=150)
 
-    with open('../result/C1/C101_100_result.txt') as f:
+    with open('../result/R107_100_result.txt') as f:
         for count, route in enumerate(f.readlines()):
             if route == "\n":
                 break
