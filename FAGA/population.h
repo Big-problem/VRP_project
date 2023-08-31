@@ -11,6 +11,7 @@ public:
     Population(int,int,const vector<Node>&);
     Population();
     void attribute_calculator();
+    void attribute_calculator2(int);
     void sort();
     void print();
 

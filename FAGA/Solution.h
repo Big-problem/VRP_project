@@ -6,6 +6,7 @@ private:
     vector<Route> routes;
     double total_dist_travelled;
     double route_balance;
+    int target;
     double F1v;
     double F2v;
     double F3v;

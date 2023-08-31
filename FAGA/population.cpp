@@ -44,6 +44,47 @@ void Population::attribute_calculator() //計算適應度和Pc
     for(int i=0;i<total_solution;i++) crossover_probability[i]=sol[i].AFV/total_AFV;
 }
 
+void Population::attribute_calculator2(int target) //計算適應度和Pc
+{
+    double dmax,dmin,RBmax,RBmin,a,b,c,total_AFV=0.0;
+    int Kmax=INT_MIN,Kmin=INT_MAX;
+    dmax=dmin=sol[0].total_dist_travelled;
+    RBmax=RBmin=sol[0].route_balance;
+    for(auto &i:sol)
+    {
+        dmax=max(dmax,i.total_dist_travelled);
+        dmin=min(dmin,i.total_dist_travelled);
+        Kmax=max(Kmax,i.total_routes);
+        Kmin=min(Kmin,i.total_routes);
+        RBmax=max(RBmax,i.route_balance);
+        RBmin=min(RBmin,i.route_balance);
+    }
+    a=dmax-dmin,b=Kmax-Kmin,c=RBmax-RBmin;
+    if(target == 3){
+        for(auto &i:sol)
+        {
+            i.F1v=(dmax-i.total_dist_travelled)/a;
+            i.F2v=b?(Kmax-i.total_routes+0.0)/b:1.0;
+            i.F3v=(RBmax-i.route_balance)/c;
+            i.AFV=(i.F1v+i.F2v+i.F3v)/3;
+            total_AFV+=i.AFV;
+        }
+    }
+    else if(target == 2){
+        for(auto &i:sol)
+        {
+            i.F1v=(dmax-i.total_dist_travelled)/a;
+            i.F2v=b?(Kmax-i.total_routes+0.0)/b:1.0;
+            // i.F3v=(RBmax-i.route_balance)/c;
+            i.AFV=(i.F1v+i.F2v)/2;
+            total_AFV+=i.AFV;
+        }
+    }
+    if(crossover_probability) delete []crossover_probability;
+    crossover_probability=new double[total_solution];
+    for(int i=0;i<total_solution;i++) crossover_probability[i]=sol[i].AFV/total_AFV;
+}
+
 void Population::sort() //以適應度排序解
 {
     /*try

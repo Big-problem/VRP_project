@@ -105,10 +105,12 @@ void Solution::print()
 bool Solution::operator<(Solution b)
 {
     //return AFV<b.AFV || F3v<b.F3v || F1v<b.F1v || F2v<b.F2v;
-    if(AFV==b.AFV&&F3v==b.F3v&&F1v==b.F1v) return F2v<b.F2v;
-    if(AFV==b.AFV&&F1v==b.F1v) return F3v<b.F3v;
-    if(AFV==b.AFV) return F1v<b.F1v;
-    return AFV<b.AFV;
+    if(target == 3){
+        if(AFV==b.AFV&&F3v==b.F3v&&F1v==b.F1v) return F2v<b.F2v;
+        if(AFV==b.AFV&&F1v==b.F1v) return F3v<b.F3v;
+        if(AFV==b.AFV) return F1v<b.F1v;
+        return AFV<b.AFV;
+    }
 }
 
 bool Solution::better(const Solution &a,const Solution&b) //判斷a是否比b好
