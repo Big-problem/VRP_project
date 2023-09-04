@@ -14,7 +14,7 @@ private:
     int total_routes;
     friend class Population;
     friend class FAGA;
-    friend void BCRC(const vector<Node>&,Solution,int,int,int,int,int,double);
+    // friend void BCRC(const vector<Node>&,Solution,int,int,int,int,int,double);
 public:
     Solution();
     Solution(int);

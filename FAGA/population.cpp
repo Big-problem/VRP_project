@@ -124,7 +124,7 @@ void Population::print_best()
     Solution best_solution = sol[total_solution-1];
     best_solution.print();
 
-    for(int i = 0; i < 5; ++i) sol[total_solution-1-i].print();
+    // for(int i = 0; i < 5; ++i) sol[total_solution-1-i].print();
 
     // Get the result file
     ofstream outstream;
