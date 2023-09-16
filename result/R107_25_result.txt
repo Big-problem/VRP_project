@@ -1,6 +1,6 @@
-1->3->16->7->17->15->14
-1->19->8->12->20->9->18->6
+1->3->16->15->7->14
 1->13->4->10->21->11->2
 1->22->24->23->5->26->25
+1->19->8->12->20->9->18->17->6
 
-Total distance traveled: 443.581, Number of vehicle: 4, route balance: 19.1368
+Total distance traveled: 425.269, Number of vehicle: 4, route balance: 35.0836

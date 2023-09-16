@@ -100,7 +100,7 @@ void FAGA::run_algo2()
                             children.push_back(sset.sol[sset.total_solution-1]);
                         }
                         else children.push_back(final_answers.sol[final_answers.total_solution-1]);
-                        cout << "SAD!!\n";
+                        // cout << "SAD!!\n";
                         tmp_solution_quantity++;
                     }
                 }
@@ -157,8 +157,8 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑
     while(!Mutate(b));
     children.emplace_back(a),children.emplace_back(b);*/
 
-    while(!Mutate(cross_pair[0]));
-    while(!Mutate(cross_pair[1]));
+    // while(!Mutate(cross_pair[0]));
+    // while(!Mutate(cross_pair[1]));
 
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
