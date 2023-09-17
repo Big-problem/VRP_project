@@ -128,7 +128,7 @@ void Population::print_best()
 
     // Get the result file
     ofstream outstream;
-    outstream.open("../result/R112_100_result.txt");
+    outstream.open("../result/C1/C104_100_result.txt");
     if(!outstream.fail()){
         for(int i = 0; i < best_solution.routes.size(); ++i) {
             best_solution.routes[i].print_file(outstream);

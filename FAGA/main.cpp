@@ -6,20 +6,24 @@ int main()
 {
     // double shortest_distance = -1.0;
     // Solution best_solution;
-    for(int i=1;i<=15;i++)
-    {
-        cout<<i<<": ";
-        FAGA ans(300,350,200,0.2, 2);
-        ans.run_algo2();
-        ans.test();
-        // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
-        //     best_solution = ans.get_solution();
-        //     shortest_distance = ans.get_total_distance_traveled();
-        // }
-        cout<<"\n";
-    }
 
-    analyze();
+
+    // for(int i=1;i<=15;i++)
+    // {
+    //     cout<<i<<": ";
+    //     FAGA ans(300,350,200,0.2, 2);
+    //     ans.run_algo2();
+    //     ans.test();
+    //     // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
+    //     //     best_solution = ans.get_solution();
+    //     //     shortest_distance = ans.get_total_distance_traveled();
+    //     // }
+    //     cout<<"\n";
+    // }
+
+    // analyze();
+
+
     // best_solution.print(); 
 
     // Get the result file
@@ -35,6 +39,6 @@ int main()
     // return 0;
 
 
-    // FAGA a(50,100,500,0.2, 2);
-    // a.brian_test();
+    FAGA a(350,300,200,0.2, 2);
+    a.brian_test();
 }

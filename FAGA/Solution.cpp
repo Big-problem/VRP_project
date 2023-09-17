@@ -115,12 +115,12 @@ vector<Solution> gen_population2(int z,int c,const vector<Node> &v, int target) 
 void Solution::print()
 {
     cout<<"\n";
-    // for(int i=0;i<total_routes;i++)
-    // {
-        // routes[i].print();
-        //cout<<routes.size()<<" "<<total_routes<<"\n";
-        //cout<<"\n";
-    // }
+    for(int i=0;i<total_routes;i++)
+    {
+        routes[i].print();
+        // cout<<routes.size()<<" "<<total_routes<<"\n";
+        // cout<<"\n";
+    }
     cout<<"AFV: "<<AFV<<", total dist= "<<total_dist_travelled<<", total routes= "<<total_routes<<", RB= "<<route_balance<<"\n";
 }
 
