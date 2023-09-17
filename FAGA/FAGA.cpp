@@ -25,6 +25,19 @@ FAGA::FAGA(int z,int g,int c,double pm, int target_num)
     final_answers.target = target_num;
 }
 
+FAGA::FAGA(int z,int g,int c,double pm, int target_num, string benchmark)
+{
+    node_list=read_node3(benchmark);
+    pop_size=z;
+    sset=Population(z,c,node_list, target_num);
+    capacity_limit=c;
+    generations=g;
+    tmax=node_list[0].due_time;
+    mutation_probability=pm;
+
+    final_answers.target = target_num;
+}
+
 void FAGA::run_algo()
 {
     cout<<"start\n";
@@ -127,6 +140,68 @@ void FAGA::run_algo2()
     // cout << "Brian property: " << brian_property <<", impossible: "<<brian_impossible <<"\n";
 }
 
+void FAGA::run_algo3()
+{
+    cout << "Start\n";
+    int aa=0, bb=0, cc=0, dd=0, ee = 0;
+
+    int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
+    Solution global_best;
+    global_best.total_dist_travelled = 1000000000.0;
+
+    for(int i = 0; i < generations; i++)
+    {
+        int tmp_solution_quantity = 0;
+        vector<Solution> children;
+        Solution local_best;
+        local_best.total_dist_travelled = 1000000000.0;
+        sset.attribute_calculator2();
+
+        double a=0.7, b=0.8, c=0.9;
+        int no_other_sol = 0;
+        while(tmp_solution_quantity < solution_quantity) {
+            double method = random();
+            if(tmp_solution_quantity <= solution_quantity-2 && method <= a) { // Crossover
+                Crossover3(children, local_best);
+                tmp_solution_quantity += 2;
+                aa++;
+            }
+            else if(method > a && method <= b){ // Mutation
+                if(Mutate3(children, local_best)){
+                    tmp_solution_quantity++;
+                    bb++;
+                }
+                else{
+                    Solution new_sol;
+                    new_sol.gen_solution(capacity_limit, node_list);
+                    if(new_sol.total_dist_travelled < local_best.total_dist_travelled){
+                        local_best = new_sol;
+                        tmp_solution_quantity++;
+                    }
+                    ee++;
+                }
+            }
+            else if(local_best.total_dist_travelled != 1000000000.0 && method > b && method <= c){ // local_best
+                children.push_back(local_best);
+                tmp_solution_quantity++;
+                cc++;
+            }
+            else if(i > 0 && method > c){ // global_best
+                children.push_back(global_best);
+                local_best = global_best;
+                tmp_solution_quantity++;
+                dd++;
+            }
+        }
+        solution_replace3(children, global_best, i);
+    }
+    cout << aa << " " << bb << " " << cc << " " << dd << " " << ee << "\n";
+    sset.attribute_calculator2();
+    sset.sort();
+    ans=sset.sol[sset.total_solution-1];
+    if(sset.target == 2) cout << "Single mutate: " <<single_route_mutate()<<"\n";
+}
+
 void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
 {
     vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,2); // 任挑兩解
@@ -159,6 +234,29 @@ void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑
 
     // while(!Mutate(cross_pair[0]));
     // while(!Mutate(cross_pair[1]));
+
+    children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
+}
+
+void FAGA::Crossover3(vector<Solution> &children, Solution& local_best) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
+{
+    vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,2); // 任挑兩解
+
+    Route r0=choice(cross_pair[0].routes),r1=choice(cross_pair[1].routes); // 兩解中各挑一路線
+
+    r0.nodes.erase(r0.nodes.begin()),r1.nodes.erase(r1.nodes.begin()); // 去掉起點
+    cross_delete(r0.nodes,cross_pair[1].routes);
+    cross_delete(r1.nodes,cross_pair[0].routes);
+
+    BCRC(r0.nodes,cross_pair[1]);
+    BCRC(r1.nodes,cross_pair[0]);
+
+    if(cross_pair[0].total_dist_travelled < local_best.total_dist_travelled){
+        local_best = cross_pair[0];
+    }
+    if(cross_pair[1].total_dist_travelled < local_best.total_dist_travelled){
+        local_best = cross_pair[1];
+    }
 
     children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
@@ -289,6 +387,33 @@ bool FAGA::Mutate2(vector<Solution> &children)
     return true;
 }
 
+bool FAGA::Mutate3(vector<Solution> &children, Solution &local_best)
+{
+    Solution s = choice(sset.sol); // 挑一個解
+    vector<Route> v=choices(s.routes,nullptr,nullptr,2); // 挑兩條路線
+    if(v[0]==v[1]) return false;
+
+    vector<Node> c0=v[0].nodes,c1=v[1].nodes;
+    c0.erase(c0.begin()),c1.erase(c1.begin()); //刪除起點
+    if(!c0.size()||!c1.size() || (c0.size()==c1.size()&&c1.size()==1)) return false;
+
+    Node n0=choice(c0),n1=choice(c1);
+    int p0=find(v[0].nodes.begin(),v[0].nodes.end(),n0)-v[0].nodes.begin(), p1=find(v[1].nodes.begin(),v[1].nodes.end(),n1)-v[1].nodes.begin(); // 找n0, n1的位置
+    if(!change(v[0],v[1],p0,p1)) return false; //檢查兩點位置是否可以互換
+    auto p2=find(s.routes.begin(),s.routes.end(),v[0]), p3=find(s.routes.begin(),s.routes.end(),v[1]);
+    p2->remove_node(n0),p3->remove_node(n1);
+    p2->add_node(p0,n1,capacity_limit,tmax);
+    p3->add_node(p1,n0,capacity_limit,tmax);
+
+    children.push_back(s);
+    
+    if(s.total_dist_travelled < local_best.total_dist_travelled){
+        local_best = s;
+    }
+
+    return true;
+}
+
 bool FAGA::change(Route r1,Route r2,int i1,int i2) //檢查兩點是否可以互換
 {
     Node n1=*(r1.nodes.begin()+i1),n2=*(r2.nodes.begin()+i2);
@@ -303,7 +428,22 @@ void FAGA::solution_replace(const vector<Solution> &children) //將新子代加�
     int len=children.size();
     //for(int i=0;i<len;i++) sset.sol.erase(sset.sol.begin());
     sset.sol.clear();
-    for(int i=0;i<len;i++) sset.sol.emplace_back(children[i]);
+    for(int i=0;i<len;i++)sset.sol.emplace_back(children[i]);
+}
+
+void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_best, const int &generations) //將新子代加入當前解並去除部分舊解
+{
+    int len=children.size();
+    //for(int i=0;i<len;i++) sset.sol.erase(sset.sol.begin());
+    sset.sol.clear();
+    for(int i=0;i<len;i++){
+        sset.sol.emplace_back(children[i]);
+        if(children[i].total_dist_travelled < global_best.total_dist_travelled){
+            global_best = children[i];
+            // cout << "global_update: " << generations << "\n";
+            // global_best.print();
+        }
+    }
 }
 
 void reset()
@@ -371,6 +511,29 @@ void analyze()
 
 }
 
+void analyze3(const string &result)
+{
+    double avd=0.0,avrb=0.0;
+    int avk=0,len=dist.size();
+    sort(dist.begin(),dist.end());
+    sort(RB.begin(),RB.end());
+    sort(K.begin(),K.end());
+    for(int i=0;i<len;i++)
+    {
+        avd+=dist[i];
+        avrb+=RB[i];
+        avk+=K[i];
+    }
+    avd/=len,avrb/=len,avk/=len;
+    cout<<"best:\n";
+    cout<<"D = "<<dist[0]<<", K = "<<K[0]<<", RB = "<<RB[0]<<"\n\n";
+    cout<<"average:\n";
+    cout<<"D = "<<avd<<", K = "<<avk<<", RB = "<<avrb<<"\n\n\n\n";
+
+    cout << "Final answer: \n";
+    final_answers.print_best3(result);
+}
+
 double FAGA::get_total_distance_traveled()
 {
     return ans.total_dist_travelled;
@@ -383,10 +546,13 @@ Solution FAGA::get_solution()
 
 
 void FAGA::brian_test(){
-    run_algo2();
+    run_algo3();
     ans.print();
     cout << "BBBBBBBBBBBBBBBBBBBBBBBBBBB: " << single_route_mutate() << "\n";
     ans.print();
+    cout << "TESTing...\n";
+    Solution ss = ans;
+    ss.print();
     // cout << "EEEEEEEEEEEEEEEEEEEEEEEEE: "<<sset.target<<"\n";
     // sset.attribute_calculator2();
     // sset.sort();
@@ -491,7 +657,7 @@ int FAGA::single_route_mutate() { // 對最終解排列組合
     Route mutate_route;
     int abcdefg = 0;
     for(int i = 0; i < ans.total_routes; ++i){ // 每條都permutation
-        cout << "Route " << i << " start!\n";
+        // cout << "Route " << i << " start!\n";
         if(ans.routes[i].total_nodes <= 2) continue; // 路線node數要 > 2
         
         mutate_route = ans.routes[i];
@@ -517,7 +683,7 @@ int FAGA::single_route_mutate() { // 對最終解排列組合
         // cout << mutate_ans.total_distance() << "\n";
 
         if(mutate_route.total_distance() <= mutate_ans.total_distance()) continue;
-        cout << "Route " << i << " improved!\n";
+        // cout << "Route " << i << " improved!\n";
         ans.routes[i] = mutate_ans;
         abcdefg++;
         

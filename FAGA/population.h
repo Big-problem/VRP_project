@@ -18,4 +18,5 @@ public:
 
     void add_solution(Solution&);
     void print_best();
+    void print_best3(const string&);
 };

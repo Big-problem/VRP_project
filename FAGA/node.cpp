@@ -25,7 +25,28 @@ vector<Node> read_node()
     method=false;
     vector<Node> result;
     ifstream file;
-    file.open("../benchmark/C1/C104_100.txt");
+    file.open("../benchmark/C1/C105_100.txt");
+    string line;
+    if(!file.fail())
+    {
+        while(file>>line)
+        {
+            vector<string> v=split(line,';');
+            Node tmp(v[0],make_pair(atof(v[1].data()),atof(v[2].data())),atoi(v[3].data()),atof(v[4].data()),atof(v[5].data()),0.0,0.0,atof(v[6].data()));
+            result.emplace_back(tmp);
+        }
+    }
+    file.close();
+    sp=result[0];
+    return result;
+}
+
+vector<Node> read_node3(const string& benchmark)
+{
+    method=false;
+    vector<Node> result;
+    ifstream file;
+    file.open(benchmark);
     string line;
     if(!file.fail())
     {

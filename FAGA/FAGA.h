@@ -13,15 +13,20 @@ private:
     Solution ans;
 public:
     FAGA(int,int,int,double, int);
+    FAGA(int,int,int,double, int, string);
     void run_algo();
     void run_algo2();
+    void run_algo3();
     void Crossover(vector<Solution>&);
+    void Crossover3(vector<Solution>&, Solution&);
     bool Mutate(Solution&);
     bool Mutate2(vector<Solution>&);
+    bool Mutate3(vector<Solution>&, Solution&);
     int single_route_mutate(vector<Solution>&);
     int single_route_mutate();
     bool change(Route,Route,int,int);
     void solution_replace(const vector<Solution>&);
+    void solution_replace3(const vector<Solution>&, Solution&, const int&);
     void BCRC(const vector<Node>&,Solution,int,int,int,int);
     void BCRC(vector<Node>,Solution&);
     void test();
@@ -36,4 +41,5 @@ public:
 };
 
 void analyze();
+void analyze3(const string&);
 void reset();

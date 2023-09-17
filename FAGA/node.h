@@ -34,4 +34,5 @@ public:
 
 
 vector<Node> read_node(); //讀文字檔
+vector<Node> read_node3(const string&); //讀文字檔
 double Radian(double); //度轉弧度
