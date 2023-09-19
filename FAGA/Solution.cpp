@@ -71,11 +71,15 @@ void Solution::gen_solution(int c,const vector<Node> &node_list) //生成初始�
         Node node_to_add=choice(customer_list);
         for(auto &route:routes)
         {
-            if(route.add_node(route.total_nodes,node_to_add,c,node_list[0].due_time))
-            {
-                add_route=false;
-                break;
+            int num_of_node = route.nodes.size();
+            for(int add_position = 1; add_position <= num_of_node; ++add_position){
+                if(route.add_node(add_position, node_to_add, c, node_list[0].due_time))
+                {
+                    add_route=false;
+                    break;
+                }
             }
+            if(!add_route) break;
         }
         if(add_route)
         {
@@ -117,7 +121,7 @@ void Solution::print()
     cout<<"\n";
     for(int i=0;i<total_routes;i++)
     {
-        routes[i].print();
+        // routes[i].print();
         // cout<<routes.size()<<" "<<total_routes<<"\n";
         // cout<<"\n";
     }

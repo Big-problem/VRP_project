@@ -163,7 +163,9 @@ void FAGA::run_algo3()
         Solution local_best;
         local_best.total_dist_travelled = 1000000000.0;
         sset.attribute_calculator2();
-
+        if(i == 150){
+            for(int i = 0; i < 200; ++i) cout << sset.crossover_probability[i] << " ";
+        }
         // if(do_not_improve >= 15){ // 連續5次沒有優化 隨機生成最多50組解
         //     for(int j = 0; j < do_not_improve && j < 40; ++j){
                 // Solution new_sol(final_answers.target);
@@ -203,6 +205,7 @@ void FAGA::run_algo3()
                     local_best = new_sol;
                 }
                 tmp_solution_quantity++;
+                if(i == 149) cout << "dfdfdf: "<<tmp_solution_quantity << "\n";
                 // else{
                 //     Solution new_sol;
                 //     new_sol.gen_solution(capacity_limit, node_list);
@@ -504,7 +507,7 @@ void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_
         if(children[i].total_dist_travelled < global_best.total_dist_travelled){
             global_best = children[i];
             cout << "global_update: " << generations << "\n";
-            // global_best.print();
+            global_best.print();
             // do_not_improve = 0;
             // flag = 1;
         }

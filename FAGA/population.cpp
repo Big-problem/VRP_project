@@ -84,7 +84,13 @@ void Population::attribute_calculator2() //計算適應度和Pc (用target決定
     }
     if(crossover_probability) delete []crossover_probability;
     crossover_probability=new double[total_solution];
-    for(int i=0;i<total_solution;i++) crossover_probability[i]=sol[i].AFV/total_AFV;
+    // double max_probabilyty = -1.0, min_probabilyty = 2.0;
+    for(int i=0;i<total_solution;i++){
+        crossover_probability[i]=sol[i].AFV/total_AFV;
+        // max_probabilyty = max(max_probabilyty, crossover_probability[i]);
+        // min_probabilyty = min(min_probabilyty, crossover_probability[i]);
+    }
+    // cout << "Max probability: " << max_probabilyty << "Min probability: " << min_probabilyty << "\n";
 }
 
 void Population::sort() //以適應度排序解
@@ -128,7 +134,7 @@ void Population::print_best()
 
     // Get the result file
     ofstream outstream;
-    outstream.open("../result/R2/R201_100_result.txt");
+    outstream.open("../result/RC1/RC107_100_result.txt");
     if(!outstream.fail()){
         for(int i = 0; i < best_solution.routes.size(); ++i) {
             best_solution.routes[i].print_file(outstream);

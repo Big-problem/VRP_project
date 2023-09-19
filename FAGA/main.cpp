@@ -9,25 +9,26 @@ int main()
 
 
     vector<string> benchmark;
-    benchmark.push_back("../benchmark/R2/R204_100.txt");
+    // benchmark.push_back("../benchmark/R2/R204_100.txt");
     benchmark.push_back("../benchmark/R2/R205_100.txt");
     benchmark.push_back("../benchmark/R2/R206_100.txt");
     benchmark.push_back("../benchmark/R2/R207_100.txt"); 
     benchmark.push_back("../benchmark/R2/R208_100.txt");
     
     vector<string> result;
-    result.push_back("../result/R2/R204_100_result.txt");
+    // result.push_back("../result/R2/R204_100_result.txt");
     result.push_back("../result/R2/R205_100_result.txt");
     result.push_back("../result/R2/R206_100_result.txt");
     result.push_back("../result/R2/R207_100_result.txt");
     result.push_back("../result/R2/R208_100_result.txt");
     
 
-    for(int j = 0; j < 2; ++j){
+    // for(int j = 0; j < 4; ++j){
         for(int i=1;i<=1;i++)
         {
             cout<<i<<": ";
-            FAGA ans(300,350,1000,0.2, 2, benchmark[j]);
+            // FAGA ans(300,350,1000,0.2, 2, benchmark[j]);
+            FAGA ans(200,350,200,0.2, 2);
             ans.run_algo3();
             ans.test();
             // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
@@ -37,9 +38,9 @@ int main()
             cout<<"\n";
         }
 
-        // analyze();
-        analyze3(result[j]);
-    }
+        analyze();
+        // analyze3(result[j]);
+    // }
 
 
     // best_solution.print(); 
