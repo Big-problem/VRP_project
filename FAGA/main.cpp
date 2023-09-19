@@ -10,25 +10,25 @@ int main()
 
     vector<string> benchmark;
     // benchmark.push_back("../benchmark/R2/R204_100.txt");
-    benchmark.push_back("../benchmark/C2/C205_100.txt");
-    benchmark.push_back("../benchmark/C2/C206_100.txt");
-    benchmark.push_back("../benchmark/C2/C207_100.txt"); 
-    benchmark.push_back("../benchmark/C2/C208_100.txt");
+    benchmark.push_back("../benchmark/RC2/RC202_100.txt");
+    benchmark.push_back("../benchmark/RC2/RC203_100.txt");
+    benchmark.push_back("../benchmark/RC2/RC204_100.txt"); 
+    benchmark.push_back("../benchmark/RC2/RC205_100.txt");
     
     vector<string> result;
     // result.push_back("../result/R2/R204_100_result.txt");
-    result.push_back("../result/C2/C205_100_result.txt");
-    result.push_back("../result/C2/C206_100_result.txt");
-    result.push_back("../result/C2/C207_100_result.txt");
-    result.push_back("../result/C2/C208_100_result.txt");
+    result.push_back("../result/RC2/RC202_100_result.txt");
+    result.push_back("../result/RC2/RC203_100_result.txt");
+    result.push_back("../result/RC2/RC204_100_result.txt");
+    result.push_back("../result/RC2/RC205_100_result.txt");
     
 
-    // for(int j = 0; j < 4; ++j){
+    for(int j = 0; j < 4; ++j){
         for(int i=1;i<=1;i++)
         {
             cout<<i<<": ";
-            // FAGA ans(250,100,1000,0.2, 2, benchmark[j]);
-            FAGA ans(250,300,1000,0.2, 2);
+            FAGA ans(250,100,1000,0.2, 2, benchmark[j]);
+            // FAGA ans(250,300,1000,0.2, 2);
             ans.run_algo3();
             ans.test();
             // if(shortest_distance < 0 || shortest_distance > ans.get_total_distance_traveled()){
@@ -38,9 +38,9 @@ int main()
             cout<<"\n";
         }
 
-        analyze();
-        // analyze3(result[j]);
-    // }
+        // analyze();
+        analyze3(result[j]);
+    }
 
 
     // best_solution.print(); 

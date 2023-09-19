@@ -26,7 +26,7 @@ public:
     int single_route_mutate();
     bool change(Route,Route,int,int);
     void solution_replace(const vector<Solution>&);
-    void solution_replace3(const vector<Solution>&, Solution&, Solution&, Solution&, const int&);
+    void solution_replace3(const vector<Solution>&, Solution&, Solution&, const int&);
     void BCRC(const vector<Node>&,Solution,int,int,int,int);
     void BCRC(vector<Node>,Solution&);
     void test();

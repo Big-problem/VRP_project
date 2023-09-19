@@ -153,10 +153,9 @@ void FAGA::run_algo3()
     int aa=0, bb=0, cc=0, dd=0, ee = 0;
 
     int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
-    Solution global_best_route_distance, global_best_car_num, global_best_AFV;
+    Solution global_best_route_distance, global_best_car_num;
     global_best_route_distance.total_dist_travelled = 1000000000.0;
     global_best_car_num.total_routes = 1000000000;
-    global_best_AFV.AFV = -1.0;
     do_not_improve = 0;
     for(int i = 0; i < generations; i++)
     {
@@ -185,8 +184,7 @@ void FAGA::run_algo3()
         if(i > 0){
             children.push_back(global_best_route_distance);
             children.push_back(global_best_car_num);
-            children.push_back(global_best_AFV);
-            tmp_solution_quantity += 3;
+            tmp_solution_quantity += 2;
         }
         double a=0.70, b=0.80, c=0.9;
         int no_other_sol = 0;
@@ -245,7 +243,7 @@ void FAGA::run_algo3()
             //     dd++;
             // }
         }
-        solution_replace3(children, global_best_route_distance, global_best_car_num, global_best_AFV, i);
+        solution_replace3(children, global_best_route_distance, global_best_car_num, i);
         cout << i << " Done\n";
     }
     cout << aa << " " << bb << " " << cc << " " << dd << " " << ee << "\n";
@@ -521,7 +519,7 @@ void FAGA::solution_replace(const vector<Solution> &children) //將新子代加�
     for(int i=0;i<len;i++)sset.sol.emplace_back(children[i]);
 }
 
-void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_best_route_distance, Solution &global_best_car_num, Solution &global_best_AFV, const int &generations) //將新子代加入當前解並去除部分舊解
+void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_best_route_distance, Solution &global_best_car_num, const int &generations) //將新子代加入當前解並去除部分舊解
 {
     int len=children.size();
     sset.sol.clear();
@@ -533,9 +531,6 @@ void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_
         if(children[i].total_routes < global_best_car_num.total_routes){
             global_best_car_num = children[i];
         }
-        if(children[i].AFV > global_best_AFV.AFV){
-            global_best_AFV = children[i];
-        }
     }
 
 
@@ -543,8 +538,6 @@ void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_
     global_best_route_distance.print();
     cout << "global_car_num: ";
     global_best_car_num.print();
-    cout << "global_AFV: ";
-    global_best_AFV.print();
 }
 
 void reset()
