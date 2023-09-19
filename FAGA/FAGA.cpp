@@ -11,6 +11,7 @@ vector<int> K;
 vector<double> RB;
 
 int brian_property, brian_impossible;
+int do_not_improve;
 
 FAGA::FAGA(int z,int g,int c,double pm, int target_num)
 {
@@ -142,13 +143,19 @@ void FAGA::run_algo2()
 
 void FAGA::run_algo3()
 {
-    cout << "Start\n";
+    final_answers.sol.clear();
+    final_answers.total_solution = 0;
+    final_answers.crossover_probability=nullptr;
+    dist.clear();
+    K.clear();
+    RB.clear();
+    // cout << "Start\n";
     int aa=0, bb=0, cc=0, dd=0, ee = 0;
 
     int solution_quantity = sset.total_solution; // 每個generation要產生這麼多組解
     Solution global_best;
     global_best.total_dist_travelled = 1000000000.0;
-
+    do_not_improve = 0;
     for(int i = 0; i < generations; i++)
     {
         int tmp_solution_quantity = 0;
@@ -157,49 +164,89 @@ void FAGA::run_algo3()
         local_best.total_dist_travelled = 1000000000.0;
         sset.attribute_calculator2();
 
-        double a=0.7, b=0.8, c=0.9;
+        // if(do_not_improve >= 15){ // 連續5次沒有優化 隨機生成最多50組解
+        //     for(int j = 0; j < do_not_improve && j < 40; ++j){
+                // Solution new_sol(final_answers.target);
+                // new_sol.gen_solution(capacity_limit, node_list);
+                // children.push_back(new_sol);
+            
+                // if(new_sol.total_dist_travelled < local_best.total_dist_travelled){
+                //     local_best = new_sol;
+                // }
+        //         // ee++;
+        //         tmp_solution_quantity++;
+        //     }
+        // }
+        if(i > 0){
+            children.push_back(global_best);
+            tmp_solution_quantity++;
+        }
+        double a=0.9, b=0.95, c=0.95;
         int no_other_sol = 0;
         while(tmp_solution_quantity < solution_quantity) {
             double method = random();
-            if(tmp_solution_quantity <= solution_quantity-2 && method <= a) { // Crossover
+            if(method <= a) { // Crossover
                 Crossover3(children, local_best);
-                tmp_solution_quantity += 2;
                 aa++;
+                tmp_solution_quantity++;
             }
-            else if(method > a && method <= b){ // Mutation
-                if(Mutate3(children, local_best)){
-                    tmp_solution_quantity++;
-                    bb++;
+            else if(/*i > 100 && */method > a && method <= b){ // Mutation
+                // if(!Mutate3(children, local_best)){
+                //     continue;
+                // }
+                bb++;
+                Solution new_sol(final_answers.target);
+                new_sol.gen_solution(capacity_limit, node_list);
+                children.push_back(new_sol);
+            
+                if(new_sol.total_dist_travelled < local_best.total_dist_travelled){
+                    local_best = new_sol;
                 }
-                else{
-                    Solution new_sol;
-                    new_sol.gen_solution(capacity_limit, node_list);
-                    if(new_sol.total_dist_travelled < local_best.total_dist_travelled){
-                        local_best = new_sol;
-                        tmp_solution_quantity++;
-                    }
-                    ee++;
-                }
+                tmp_solution_quantity++;
+                // else{
+                //     Solution new_sol;
+                //     new_sol.gen_solution(capacity_limit, node_list);
+                //     children.push_back(new_sol);
+                //
+                //     if(new_sol.total_dist_travelled < local_best.total_dist_travelled){
+                //         local_best = new_sol;
+                //     }
+                    // ee++;
+                // }
             }
-            else if(local_best.total_dist_travelled != 1000000000.0 && method > b && method <= c){ // local_best
-                children.push_back(local_best);
+            else{
+                if(!Mutate3(children, local_best)){
+                    continue;
+                }
                 tmp_solution_quantity++;
                 cc++;
             }
-            else if(i > 0 && method > c){ // global_best
-                children.push_back(global_best);
-                local_best = global_best;
-                tmp_solution_quantity++;
-                dd++;
-            }
+            // else if(local_best.total_dist_travelled != 1000000000.0 && method > b && method <= c){ // local_best
+            //     children.push_back(local_best);
+            //     cc++;
+            //     tmp_solution_quantity++;
+            // }
+            // else if(i > 0 && method > c){ // global_best
+            //     children.push_back(global_best);
+            //     if(global_best.total_dist_travelled < local_best.total_dist_travelled) local_best = global_best;
+            //     tmp_solution_quantity++;
+            //     dd++;
+            // }
         }
         solution_replace3(children, global_best, i);
     }
     cout << aa << " " << bb << " " << cc << " " << dd << " " << ee << "\n";
+    // cout << "A" << "\n";
     sset.attribute_calculator2();
     sset.sort();
+    // cout << "B" << "\n";
+    // cout << sset.sol.size() << " " << sset.total_solution << "\n";
     ans=sset.sol[sset.total_solution-1];
+    // cout << "C" << "\n";
+    ans.print();
+    cout << "\n";
     if(sset.target == 2) cout << "Single mutate: " <<single_route_mutate()<<"\n";
+
 }
 
 void FAGA::Crossover(vector<Solution> &children) //從舊解中以Pc為權重挑出2個解，在從這2個解的路線集合中個別挑出1條路線，去除彼此的節點後生成新子代
@@ -251,14 +298,27 @@ void FAGA::Crossover3(vector<Solution> &children, Solution& local_best) //從舊
     BCRC(r0.nodes,cross_pair[1]);
     BCRC(r1.nodes,cross_pair[0]);
 
-    if(cross_pair[0].total_dist_travelled < local_best.total_dist_travelled){
-        local_best = cross_pair[0];
+    if(cross_pair[0].total_dist_travelled < cross_pair[1].total_dist_travelled){
+        children.emplace_back(cross_pair[0]);
+        if(cross_pair[0].total_dist_travelled < local_best.total_dist_travelled){
+            local_best = cross_pair[0];
+        }
     }
-    if(cross_pair[1].total_dist_travelled < local_best.total_dist_travelled){
-        local_best = cross_pair[1];
+    else{
+        children.emplace_back(cross_pair[1]);
+        if(cross_pair[1].total_dist_travelled < local_best.total_dist_travelled){
+            local_best = cross_pair[1];
+        }
     }
 
-    children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
+    // if(cross_pair[0].total_dist_travelled < local_best.total_dist_travelled){
+    //     local_best = cross_pair[0];
+    // }
+    // if(cross_pair[1].total_dist_travelled < local_best.total_dist_travelled){
+    //     local_best = cross_pair[1];
+    // }
+
+    // children.emplace_back(cross_pair[0]),children.emplace_back(cross_pair[1]);
 }
 
 void FAGA::BCRC(const vector<Node> &nodes,Solution cps,int ri,int ni,int pi,int inserted) //生成新解(Old version)
@@ -389,7 +449,9 @@ bool FAGA::Mutate2(vector<Solution> &children)
 
 bool FAGA::Mutate3(vector<Solution> &children, Solution &local_best)
 {
-    Solution s = choice(sset.sol); // 挑一個解
+    vector<Solution> cross_pair=choices(sset.sol,sset.crossover_probability,nullptr,1); // 任挑一解
+    Solution s = cross_pair[0]; 
+
     vector<Route> v=choices(s.routes,nullptr,nullptr,2); // 挑兩條路線
     if(v[0]==v[1]) return false;
 
@@ -436,14 +498,18 @@ void FAGA::solution_replace3(const vector<Solution> &children, Solution &global_
     int len=children.size();
     //for(int i=0;i<len;i++) sset.sol.erase(sset.sol.begin());
     sset.sol.clear();
+    // int flag = 0;
     for(int i=0;i<len;i++){
         sset.sol.emplace_back(children[i]);
         if(children[i].total_dist_travelled < global_best.total_dist_travelled){
             global_best = children[i];
-            // cout << "global_update: " << generations << "\n";
+            cout << "global_update: " << generations << "\n";
             // global_best.print();
+            // do_not_improve = 0;
+            // flag = 1;
         }
     }
+    // if(!flag) do_not_improve++;
 }
 
 void reset()
