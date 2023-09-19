@@ -134,7 +134,7 @@ void Population::print_best()
 
     // Get the result file
     ofstream outstream;
-    outstream.open("../result/RC1/RC107_100_result.txt");
+    outstream.open("../result/RC2/RC201_100_result.txt");
     if(!outstream.fail()){
         for(int i = 0; i < best_solution.routes.size(); ++i) {
             best_solution.routes[i].print_file(outstream);
@@ -165,4 +165,24 @@ void Population::print_best3(const string &result)
         outstream << "Total distance traveled: " << best_solution.total_dist_travelled << ", Number of vehicle: " << best_solution.total_routes << ", route balance: " << best_solution.route_balance << "\n";
     }
     else cout << "Failed to open file!\n";
+}
+
+vector<Solution> Population::select_solution(const int &num)
+{
+    vector<Solution> ret;
+    for(int i = 0; i < num; ++i){
+        vector<Solution> tmp_solution_vec;
+        tmp_solution_vec.clear();
+        Solution tmp_s;
+        tmp_s.AFV = -1.0;
+        for(int j = 0; j < 4; ++j){ // 每次隨機挑四個, 選最好的那個
+            tmp_solution_vec.push_back(sol[random()*total_solution]);
+            if(tmp_solution_vec[j].AFV > tmp_s.AFV){
+                tmp_s = tmp_solution_vec[j];
+            }
+        }
+        ret.push_back(tmp_s);
+    }
+
+    return ret;
 }
